@@ -10,12 +10,21 @@ func main() {
 	fen, _ := chess.FEN("rnbqkbnr/pppp1ppp/8/4p3/5P2/4P3/PPPP2PP/RNBQKBNR b KQkq - 0 2")
 	game := chess.NewGame(fen)
 	moves := game.ValidMoves()
+
+	bestValue := BoardValue(game.Position().Board())
+	bestMove := moves[0]
+
 	for _, move := range moves {
 		clone := game.Clone()
 		clone.Move(move)
-		fmt.Println(BoardValue(clone.Position().Board()))
+		boardValue := BoardValue(clone.Position().Board())
+		if boardValue < bestValue {
+			bestValue = boardValue
+			bestMove = move
+		}
 	}
-	// TODO roma: print the next best move
+	fmt.Println(bestValue, "best value")
+	fmt.Println(bestMove, "best move")
 }
 
 func BoardValue(board *chess.Board) int {
