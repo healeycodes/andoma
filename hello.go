@@ -8,9 +8,9 @@ import (
 )
 
 func main() {
-	fen, _ := chess.FEN("rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2")
+	fen, _ := chess.FEN("rnb1kbnr/pppp1ppp/6q1/8/4p3/P7/PPPPPNPP/RNBQKB1R w KQkq - 0 1")
 	game := chess.NewGame(fen)
-	depth := 2
+	depth := 3
 	isPlayer := true
 	bestMove(depth, game, isPlayer)
 }
