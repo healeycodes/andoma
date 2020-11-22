@@ -1,3 +1,5 @@
+package tables
+
 import (
 	"github.com/notnil/chess"
 )
