@@ -4,28 +4,28 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/notnil/chess"
 	"github.com/healeycodes/chess-bot/tables"
+	"github.com/notnil/chess"
 )
 
 func main() {
-	fen, _ := chess.FEN("4kbnr/8/8/8/8/8/PPPPPPPP/RNBQKBNR w KQk - 0 1")
+	fen, _ := chess.FEN("3k4/8/8/8/r4P2/4P3/r7/4K3 b - - 0 1")
 	game := chess.NewGame(fen)
 	depth := 10
 	isPlayer := true
 
-	fmt.Println(game.Position().Board().Draw())
-
-	for true {
-		bestMove(game, depth, isPlayer)
-		if game.Outcome() != "*" {
-			fmt.Println(game.Outcome())
-			break
-		}
-	}
+	// for true {
+	// 	BestMove(game, depth, isPlayer)
+	// 	if game.Outcome() != "*" {
+	// 		fmt.Println(game.Outcome())
+	// 		break
+	// 	}
+	// }
+	fmt.Println(BestMove(game, depth, isPlayer))
 }
 
-func bestMove(game *chess.Game, depth int, isPlayer bool) {
+// BestMove returns the strongest next move.
+func BestMove(game *chess.Game, depth int, isPlayer bool) *chess.Move {
 	bestValue := -math.MaxInt32
 	bestMove := &chess.Move{}
 	for _, move := range game.ValidMoves() {
@@ -38,10 +38,9 @@ func bestMove(game *chess.Game, depth int, isPlayer bool) {
 		}
 	}
 
-	game.Move(bestMove)
 	fmt.Println(game.Position().Board().Draw())
-	// fmt.Println(bestValue, "best value")
-	// fmt.Println(bestMove, "best move")
+	game.Move(bestMove)
+	return bestMove
 }
 
 func minimax(game *chess.Game, depth int, isPlayer bool) int {
@@ -87,28 +86,17 @@ func mini(game *chess.Game, depth int, alpha int, beta int) int {
 	return value
 }
 
+// BoardValue evaluates the board's value
 func BoardValue(game *chess.Game) int {
 	if game.Position().Status() == chess.Checkmate {
 		return math.MaxInt32
 	}
 
-	board := game.Position().Board()
-	pieceValue := map[chess.PieceType]int{chess.Pawn: 100, chess.Bishop: 330, chess.King: 20000, chess.Knight: 320, chess.Queen: 900, chess.Rook: 500}
 	sum := 0
-
-	for i, piece := range board.SquareMap() {
-		fmt.Println(tables.Evaluate(i, chess.PieceType))
-		sum += pieceValue[piece.Type()]
+	for square, piece := range game.Position().Board().SquareMap() {
+		sum += tables.Evaluate(int(square), piece)
 	}
 	return sum
-}
-
-// FirstMove provides one valid move
-func FirstMove() *chess.Move {
-	game := chess.NewGame()
-	moves := game.ValidMoves()
-	game.Move(moves[0])
-	return moves[0] // b1a3
 }
 
 func min(x, y int) int {
