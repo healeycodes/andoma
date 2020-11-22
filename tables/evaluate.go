@@ -6,6 +6,7 @@ import (
 	"github.com/notnil/chess"
 )
 
+// Evaluate calculates the value of a piece on a square
 func Evaluate(square int, piece chess.Piece) int {
 	switch piece {
 	case chess.WhiteKing:
@@ -38,7 +39,7 @@ func Evaluate(square int, piece chess.Piece) int {
 	return 0
 }
 
-// tables from:
+// Tables lifted from and are from White's POV
 // https://www.chessprogramming.org/Simplified_Evaluation_Function
 
 var pawn = [...]int{0, 0, 0, 0, 0, 0, 0, 0,
