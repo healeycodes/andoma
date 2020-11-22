@@ -5,95 +5,99 @@ import (
 	"math"
 
 	"github.com/notnil/chess"
+	"github.com/healeycodes/chess-bot/tables"
 )
 
 func main() {
-	fen, _ := chess.FEN("rnb1kbnr/pppp1ppp/6q1/8/4p3/P7/PPPPPNPP/RNBQKB1R w KQkq - 0 1")
+	fen, _ := chess.FEN("4kbnr/8/8/8/8/8/PPPPPPPP/RNBQKBNR w KQk - 0 1")
 	game := chess.NewGame(fen)
-	depth := 3
+	depth := 10
 	isPlayer := true
-	bestMove(depth, game, isPlayer)
-}
 
-func bestMove(depth int, game *chess.Game, isPlayer bool) {
-	moves := game.ValidMoves()
-
-	bestValue := -math.MaxInt32
-	bestMove := moves[0]
 	fmt.Println(game.Position().Board().Draw())
 
-	for _, move := range moves {
+	for true {
+		bestMove(game, depth, isPlayer)
+		if game.Outcome() != "*" {
+			fmt.Println(game.Outcome())
+			break
+		}
+	}
+}
+
+func bestMove(game *chess.Game, depth int, isPlayer bool) {
+	bestValue := -math.MaxInt32
+	bestMove := &chess.Move{}
+	for _, move := range game.ValidMoves() {
 		clone := game.Clone()
 		clone.Move(move)
-		value := minimax(depth, clone, !isPlayer)
+		value := minimax(clone, depth, !isPlayer)
 		if value >= bestValue {
 			bestValue = value
 			bestMove = move
 		}
 	}
+
 	game.Move(bestMove)
 	fmt.Println(game.Position().Board().Draw())
-	fmt.Println(bestValue, "best value")
-	fmt.Println(bestMove, "best move")
+	// fmt.Println(bestValue, "best value")
+	// fmt.Println(bestMove, "best move")
 }
 
-func minimax(depth int, game *chess.Game, isPlayer bool) int {
-
+func minimax(game *chess.Game, depth int, isPlayer bool) int {
 	if isPlayer {
-		return maxi(depth-1, game)
+		return maxi(game, depth-1, -math.MaxInt32, math.MaxInt32)
 	}
-
-	return mini(depth-1, game)
-
+	return mini(game, depth-1, math.MaxInt32, -math.MaxInt32)
 }
 
-func maxi(depth int, game *chess.Game) int {
+func maxi(game *chess.Game, depth int, alpha int, beta int) int {
 	if depth == 0 {
-		return -BoardValue(game.Position().Board())
+		return -BoardValue(game)
 	}
 
-	moves := game.ValidMoves()
-	max := -math.MaxInt32
-
-	for _, move := range moves {
+	value := -math.MaxInt32
+	for _, move := range game.ValidMoves() {
 		clone := game.Clone()
 		clone.Move(move)
-
-		score := mini(depth-1, clone)
-		if score > max {
-			max = score
+		value = max(value, mini(clone, depth-1, alpha, beta))
+		alpha = max(alpha, value)
+		if alpha >= beta {
+			break
 		}
 	}
-	// fmt.Println(max, "score, max in maxi")
-	return max
+	return value
 }
 
-func mini(depth int, game *chess.Game) int {
+func mini(game *chess.Game, depth int, alpha int, beta int) int {
 	if depth == 0 {
-		return -BoardValue(game.Position().Board())
+		return -BoardValue(game)
 	}
 
-	moves := game.ValidMoves()
-	min := math.MaxInt32
-
-	for _, move := range moves {
+	value := math.MaxInt32
+	for _, move := range game.ValidMoves() {
 		clone := game.Clone()
 		clone.Move(move)
-
-		score := maxi(depth-1, clone)
-		if score < min {
-			min = score
+		value = min(value, maxi(clone, depth-1, alpha, beta))
+		beta = min(beta, value)
+		if beta <= alpha {
+			break
 		}
 	}
-	// fmt.Println(min, "score, min in mini")
-	return min
+	return value
 }
 
-func BoardValue(board *chess.Board) int {
-	pieceValue := map[chess.PieceType]int{chess.Pawn: 100, chess.Bishop: 350, chess.King: 10000, chess.Knight: 350, chess.Queen: 1000, chess.Rook: 525}
+func BoardValue(game *chess.Game) int {
+	if game.Position().Status() == chess.Checkmate {
+		return math.MaxInt32
+	}
+
+	board := game.Position().Board()
+	pieceValue := map[chess.PieceType]int{chess.Pawn: 100, chess.Bishop: 330, chess.King: 20000, chess.Knight: 320, chess.Queen: 900, chess.Rook: 500}
 	sum := 0
 
-	for _, piece := range board.SquareMap() {
+	for i, piece := range board.SquareMap() {
+		fmt.Println(tables.Evaluate(i, chess.PieceType))
 		sum += pieceValue[piece.Type()]
 	}
 	return sum
@@ -105,4 +109,18 @@ func FirstMove() *chess.Move {
 	moves := game.ValidMoves()
 	game.Move(moves[0])
 	return moves[0] // b1a3
+}
+
+func min(x, y int) int {
+	if x < y {
+		return x
+	}
+	return y
+}
+
+func max(x, y int) int {
+	if x > y {
+		return x
+	}
+	return y
 }
