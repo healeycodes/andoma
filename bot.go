@@ -9,36 +9,27 @@ import (
 )
 
 func main() {
-	fen, _ := chess.FEN("3k4/8/8/8/r4P2/4P3/r7/4K3 b - - 0 1")
+	fen, _ := chess.FEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
 	game := chess.NewGame(fen)
 	depth := 10
-	isPlayer := true
 
-	// for true {
-	// 	BestMove(game, depth, isPlayer)
-	// 	if game.Outcome() != "*" {
-	// 		fmt.Println(game.Outcome())
-	// 		break
-	// 	}
-	// }
-	fmt.Println(BestMove(game, depth, isPlayer))
+	fmt.Println(BestMove(game, depth))
 }
 
-// BestMove returns the strongest next move.
-func BestMove(game *chess.Game, depth int, isPlayer bool) *chess.Move {
+// BestMove returns next strongest move
+func BestMove(game *chess.Game, depth int) *chess.Move {
 	bestValue := -math.MaxInt32
 	bestMove := &chess.Move{}
 	for _, move := range game.ValidMoves() {
 		clone := game.Clone()
 		clone.Move(move)
-		value := minimax(clone, depth, !isPlayer)
+		value := minimax(clone, depth, false)
 		if value >= bestValue {
 			bestValue = value
 			bestMove = move
 		}
 	}
 
-	fmt.Println(game.Position().Board().Draw())
 	game.Move(bestMove)
 	return bestMove
 }

@@ -12,7 +12,7 @@ func TestWhiteWillAvoidValueAndCheckmate(t *testing.T) {
 	// checkmate that is two moves away. Black cannot avoid this.
 	fen, _ := chess.FEN("k7/8/5ppQ/8/8/8/8/1R2K3 w - - 0 1")
 	game := chess.NewGame(fen)
-	move := BestMove(game, 10, true)
+	move := BestMove(game, 10)
 
 	notation := fmt.Sprintf("%v", move)
 	if notation != "h6h7" {
@@ -25,7 +25,7 @@ func TestBlackWillAvoidValueAndCheckmate(t *testing.T) {
 	// checkmate that is two moves away. White cannot avoid this.
 	fen, _ := chess.FEN("3k4/8/8/8/5P2/1r2P3/r7/4K3 b - - 0 1")
 	game := chess.NewGame(fen)
-	move := BestMove(game, 10, true)
+	move := BestMove(game, 10)
 
 	notation := fmt.Sprintf("%v", move)
 	if notation != "b3b1" {
