@@ -9,9 +9,9 @@ import (
 )
 
 func main() {
-	fen, _ := chess.FEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+	fen, _ := chess.FEN("r3r1k1/ppp1qpbp/2n3p1/7b/2BPN2P/2P1P3/PPQ2KP1/R1B4R b - - 0 1")
 	game := chess.NewGame(fen)
-	depth := 10
+	depth := 35
 
 	fmt.Println(BestMove(game, depth))
 }
@@ -43,7 +43,7 @@ func minimax(game *chess.Game, depth int, isPlayer bool) int {
 
 func maxi(game *chess.Game, depth int, alpha int, beta int) int {
 	if depth == 0 {
-		return -BoardValue(game)
+		return -tables.EvaluateBoard(game)
 	}
 
 	value := -math.MaxInt32
@@ -61,7 +61,7 @@ func maxi(game *chess.Game, depth int, alpha int, beta int) int {
 
 func mini(game *chess.Game, depth int, alpha int, beta int) int {
 	if depth == 0 {
-		return -BoardValue(game)
+		return -tables.EvaluateBoard(game)
 	}
 
 	value := math.MaxInt32
@@ -75,19 +75,6 @@ func mini(game *chess.Game, depth int, alpha int, beta int) int {
 		}
 	}
 	return value
-}
-
-// BoardValue evaluates the board's value
-func BoardValue(game *chess.Game) int {
-	if game.Position().Status() == chess.Checkmate {
-		return math.MaxInt32
-	}
-
-	sum := 0
-	for square, piece := range game.Position().Board().SquareMap() {
-		sum += tables.Evaluate(int(square), piece)
-	}
-	return sum
 }
 
 func min(x, y int) int {
