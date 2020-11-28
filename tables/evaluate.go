@@ -33,37 +33,44 @@ func EvaluateBoard(game *chess.Game) int {
 }
 
 func evaluatePiece(square int, piece chess.Piece, endgame bool) int {
+	P := 100
+	N := 320
+	B := 330
+	R := 500
+	Q := 900
+	K := 20000
+
 	switch piece {
 	case chess.WhiteKing:
 		if endgame {
-			return kingEndGame[square]
+			return kingEndGame[square] + K
 		}
-		return kingMidGame[square]
+		return kingMidGame[square] + K
 	case chess.WhiteQueen:
-		return queen[square]
+		return queen[square] + Q
 	case chess.WhiteRook:
-		return rook[square]
+		return rook[square] + R
 	case chess.WhiteBishop:
-		return bishop[square]
+		return bishop[square] + B
 	case chess.WhiteKnight:
-		return knight[square]
+		return knight[square] + N
 	case chess.WhitePawn:
-		return pawn[square]
+		return pawn[square] + P
 	case chess.BlackKing:
 		if endgame {
-			return kingEndGame[len(kingEndGame)-square-1]
+			return kingEndGame[len(kingEndGame)-square-1] + K
 		}
-		return kingMidGame[len(kingMidGame)-square-1]
+		return kingMidGame[len(kingMidGame)-square-1] + K
 	case chess.BlackQueen:
-		return queen[len(queen)-square-1]
+		return queen[len(queen)-square-1] + Q
 	case chess.BlackRook:
-		return rook[len(rook)-square-1]
+		return rook[len(rook)-square-1] + R
 	case chess.BlackBishop:
-		return bishop[len(bishop)-square-1]
+		return bishop[len(bishop)-square-1] + B
 	case chess.BlackKnight:
-		return knight[len(knight)-square-1]
+		return knight[len(knight)-square-1] + N
 	case chess.BlackPawn:
-		return pawn[len(pawn)-square-1]
+		return pawn[len(pawn)-square-1] + P
 	}
 
 	fmt.Println("Shouldn't be reachable")
