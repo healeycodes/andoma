@@ -33,6 +33,7 @@ func EvaluateBoard(game *chess.Game) int {
 }
 
 func evaluatePiece(square int, piece chess.Piece, endgame bool) int {
+	// Piece weights
 	P := 100
 	N := 320
 	B := 330
@@ -40,6 +41,7 @@ func evaluatePiece(square int, piece chess.Piece, endgame bool) int {
 	Q := 900
 	K := 20000
 
+	// Apply square bonus
 	switch piece {
 	case chess.WhiteKing:
 		if endgame {
@@ -77,8 +79,9 @@ func evaluatePiece(square int, piece chess.Piece, endgame bool) int {
 	return 0
 }
 
-// Tables lifted from and are from White's POV
+// Tables lifted from:
 // https://www.chessprogramming.org/Simplified_Evaluation_Function
+// They are from White's POV and should be flipped for Black
 
 var pawn = [...]int{0, 0, 0, 0, 0, 0, 0, 0,
 	50, 50, 50, 50, 50, 50, 50, 50,

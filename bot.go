@@ -9,11 +9,12 @@ import (
 )
 
 func main() {
-	fen, _ := chess.FEN("rnbqk1nr/p1ppppbp/1p4p1/8/2P5/2Q5/PP1PPPPP/RNB1KBNR b KQkq - 0 1")
+	fen, _ := chess.FEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
 	game := chess.NewGame(fen)
-	depth := 3
+	depth := 100
 
 	fmt.Println(BestMove(game, depth))
+
 }
 
 // BestMove returns next strongest move
