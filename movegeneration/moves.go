@@ -1,21 +1,11 @@
-package main
+package movegeneration
 
 import (
-	"fmt"
 	"math"
 
 	"github.com/healeycodes/chess-bot/tables"
 	"github.com/notnil/chess"
 )
-
-func main() {
-	fen, _ := chess.FEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
-	game := chess.NewGame(fen)
-	depth := 100
-
-	fmt.Println(BestMove(game, depth))
-
-}
 
 // BestMove returns next strongest move
 func BestMove(game *chess.Game, depth int) *chess.Move {
