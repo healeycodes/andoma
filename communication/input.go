@@ -60,7 +60,7 @@ func Commands(text string, currentMatch *match) bool {
 	if text == "go" {
 		fen, _ := chess.FEN(currentMatch.fen)
 		game := chess.NewGame(fen)
-		depth := 30
+		depth := 30 // TODO: accept this as an option/config value somewhere
 
 		fmt.Println("bestmove", movegeneration.BestMove(game, depth))
 		return false
