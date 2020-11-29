@@ -2,7 +2,7 @@
 
 [![](https://github.com/healeycodes/andoma/workflows/Go/badge.svg)](https://github.com/healeycodes/andoma/actions?query=workflow%3AGo)
 
-A chess engine called _Andoma_ after its two original authors Andrew and Roma.
+A chess engine called _Andoma_ (after its two original authors Andrew and Roma).
 
 It implements:
 - Alpha-beta pruning for move searching
@@ -40,9 +40,3 @@ Build with:
 There are some unit tests you can run with:
 
 `go test ./...`
-
-<br>
-
-## And/oma
-
-Named after it's two original authors Andrew and Roma!
