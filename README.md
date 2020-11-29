@@ -1,4 +1,6 @@
-# Andoma
+# ♟ Andoma
+
+[![](https://github.com/healeycodes/andoma/workflows/Go/badge.svg)](https://github.com/healeycodes/andoma/actions?query=workflow%3AGo)
 
 A chess engine called _Andoma_.
 
