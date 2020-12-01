@@ -18,12 +18,22 @@ uci
 # id name Andoma
 # id author Andrew Healey & Roma Parramore
 # uciok
-position fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+position startpos moves e2e4
 go
-# bestmove h2h4
+# bestmove h7h5
 ```
 
 <br>
+
+## Lichess.org
+
+The UCI protocol slice that's implemented by this engine means you can play it via lichess.org by using [ShailChoksi/lichess-bot](https://github.com/ShailChoksi/lichess-bot) and a BOT account.
+
+ShailChoksi/lichess-bot is a bridge between Lichess API and chess engines.
+
+<br>
+
+## Development
 
 Start the engine with:
 

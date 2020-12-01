@@ -33,6 +33,7 @@ func Listen(reader *bufio.Reader) {
 
 // Commands accepts a command and the current match
 func Commands(text string, currentMatch *match) bool {
+	depth := 30 // TODO: accept this as an option/config value somewhere
 
 	if text == "uci" {
 		fmt.Println("id name Andoma") // Andrew/Roma -> And/oma
@@ -50,6 +51,20 @@ func Commands(text string, currentMatch *match) bool {
 		return false
 	}
 
+	if strings.Contains(text, "position startpos moves") {
+		moves := strings.Split(text, " ")[3:]
+		game := chess.NewGame(chess.UseNotation(chess.LongAlgebraicNotation{}))
+		for _, move := range moves {
+			err := game.MoveStr(move)
+			if err != nil {
+				println("Move decode error:")
+				println(err)
+			}
+		}
+		currentMatch.fen = game.Position().String()
+		return false
+	}
+
 	if strings.Contains(text, "position fen") {
 		if len(strings.Split(text, "")) > 2 {
 			currentMatch.fen = strings.Split(text, "")[2]
@@ -57,11 +72,9 @@ func Commands(text string, currentMatch *match) bool {
 		return false
 	}
 
-	if text == "go" {
+	if text[:2] == "go" {
 		fen, _ := chess.FEN(currentMatch.fen)
 		game := chess.NewGame(fen)
-		depth := 30 // TODO: accept this as an option/config value somewhere
-
 		fmt.Println("bestmove", movegeneration.BestMove(game, depth))
 		return false
 	}
