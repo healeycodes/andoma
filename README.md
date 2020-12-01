@@ -27,9 +27,7 @@ go
 
 ## Lichess.org
 
-The UCI protocol slice that's implemented by this engine means you can play it via lichess.org by using [ShailChoksi/lichess-bot](https://github.com/ShailChoksi/lichess-bot) and a BOT account.
-
-ShailChoksi/lichess-bot is a bridge between Lichess API and chess engines.
+The UCI protocol slice that's implemented by this engine means you can play it via lichess.org by using [ShailChoksi/lichess-bot](https://github.com/ShailChoksi/lichess-bot) (a bridge between Lichess API and chess engines) and a BOT account.
 
 <br>
 
