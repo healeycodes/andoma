@@ -20,8 +20,6 @@ func BestMove(game *chess.Game, depth int) *chess.Move {
 			bestMove = move
 		}
 	}
-
-	game.Move(bestMove)
 	return bestMove
 }
 
