@@ -54,3 +54,37 @@ func TestTradeForValue(t *testing.T) {
 		t.Errorf("It returned the wrong move %v", notation)
 	}
 }
+
+func TestTakeUndefendedRook(t *testing.T) {
+	// Black bishop should take a undefended rook
+	fen, _ := chess.FEN("3r4/8/1R4pk/1P3p1p/3bn2P/3R2P1/6K1/3B4 b - - 0 1")
+	game := chess.NewGame(fen)
+	move := BestMove(game, 3)
+
+	notation := fmt.Sprintf("%v", move)
+	if notation != "d4b6" {
+		t.Errorf("It returned the wrong move %v", notation)
+	}
+}
+
+// TODO: Make the engine aware of fork opportunities
+// func TestForkKingAndRook(t *testing.T) {
+// 	// White knight should fork the black king/rook
+// 	fen, _ := chess.FEN("8/3R1pk1/3N1rp1/3K3p/5P1P/6P1/8/4b3 w - - 0 1")
+// 	game := chess.NewGame(fen)
+// 	move := BestMove(game, 4)
+// 	game.Move(move)
+// 	moveTwo := BestMove(game, 4)
+
+// 	// Fork
+// 	notation := fmt.Sprintf("%v", move)
+// 	if notation != "d5e8" {
+// 		t.Errorf("It returned the wrong move %v", notation)
+// 	}
+
+// 	// Take rook
+// 	notation = fmt.Sprintf("%v", moveTwo)
+// 	if notation != "e8f6" {
+// 		t.Errorf("It returned the wrong move %v", notation)
+// 	}
+// }
