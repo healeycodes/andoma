@@ -17,14 +17,14 @@ var initialFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
 // Listen starts listening for UCI commands and acts on them
 func Listen(reader *bufio.Reader) {
-	currentMatch := &match{fen: initialFen}
+	match := &match{fen: initialFen}
 
 	for true {
 		text, _ := reader.ReadString('\n')
 		text = strings.TrimRight(text, "\r\n")
 		println(">>>", text)
 
-		quit := Commands(text, currentMatch)
+		quit := Commands(text, match)
 		if quit {
 			break
 		}
@@ -32,8 +32,8 @@ func Listen(reader *bufio.Reader) {
 }
 
 // Commands accepts a command and the current match
-func Commands(text string, currentMatch *match) bool {
-	depth := 30 // TODO: accept this as an option/config value somewhere
+func Commands(text string, match *match) bool {
+	depth := 7 // TODO: accept this as an option/config value somewhere
 
 	if text == "uci" {
 		fmt.Println("id name Andoma") // Andrew/Roma -> And/oma
@@ -61,19 +61,20 @@ func Commands(text string, currentMatch *match) bool {
 				println(err)
 			}
 		}
-		currentMatch.fen = game.Position().String()
+		match.fen = game.Position().String()
 		return false
 	}
 
 	if strings.Contains(text, "position fen") {
-		if len(strings.Split(text, "")) > 2 {
-			currentMatch.fen = strings.Split(text, "")[2]
+		if len(strings.Split(text, " ")) > 2 {
+			match.fen = strings.Join(strings.Split(text, " ")[2:], " ")
+			println(match.fen)
 		}
 		return false
 	}
 
-	if text[:2] == "go" {
-		fen, _ := chess.FEN(currentMatch.fen)
+	if strings.Contains(text[:2], "go") {
+		fen, _ := chess.FEN(match.fen)
 		game := chess.NewGame(fen)
 		fmt.Println("bestmove", movegeneration.BestMove(game, depth))
 		return false
