@@ -33,7 +33,7 @@ func Listen(reader *bufio.Reader) {
 
 // Commands accepts a command and the current match
 func Commands(text string, match *match) bool {
-	depth := 7 // TODO: accept this as an option/config value somewhere
+	depth := 2 // TODO: accept this as an option/config value somewhere
 
 	if text == "uci" {
 		fmt.Println("id name Andoma") // Andrew/Roma -> And/oma
@@ -68,7 +68,6 @@ func Commands(text string, match *match) bool {
 	if strings.Contains(text, "position fen") {
 		if len(strings.Split(text, " ")) > 2 {
 			match.fen = strings.Join(strings.Split(text, " ")[2:], " ")
-			println(match.fen)
 		}
 		return false
 	}

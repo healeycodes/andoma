@@ -1,7 +1,6 @@
 package tables
 
 import (
-	"fmt"
 	"math"
 
 	"github.com/notnil/chess"
@@ -75,7 +74,7 @@ func evaluatePiece(square int, piece chess.Piece, endgame bool) int {
 		return pawn[len(pawn)-square-1] + P
 	}
 
-	fmt.Println("Shouldn't be reachable")
+	println("Shouldn't be reachable")
 	return 0
 }
 
