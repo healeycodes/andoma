@@ -7,6 +7,18 @@ import (
 	"github.com/notnil/chess"
 )
 
+func TestTakeUndefendedRook(t *testing.T) {
+	// Black bishop should take a undefended rook
+	fen, _ := chess.FEN("3r4/8/1R4pk/1P3p1p/3bn2P/3R2P1/6K1/3B4 b - - 0 1")
+	game := chess.NewGame(fen)
+	move := BestMove(game, 2)
+
+	notation := fmt.Sprintf("%v", move)
+	if notation != "d4b6" {
+		t.Errorf("It returned the wrong move %v", notation)
+	}
+}
+
 // TODO: Fix engine bug
 // func TestAvoidingValueForCheckmate(t *testing.T) {
 // 	// White should avoid taking a pawn and instead seek the
@@ -56,18 +68,6 @@ import (
 // 		t.Errorf("It returned the wrong move %v", notation)
 // 	}
 // }
-
-func TestTakeUndefendedRook(t *testing.T) {
-	// Black bishop should take a undefended rook
-	fen, _ := chess.FEN("3r4/8/1R4pk/1P3p1p/3bn2P/3R2P1/6K1/3B4 b - - 0 1")
-	game := chess.NewGame(fen)
-	move := BestMove(game, 2)
-
-	notation := fmt.Sprintf("%v", move)
-	if notation != "d4b6" {
-		t.Errorf("It returned the wrong move %v", notation)
-	}
-}
 
 // TODO: Fix engine bug
 // func TestTakeQueenOverPawnAdvancement(t *testing.T) {
