@@ -34,4 +34,4 @@ jobs:
     - name: Test with unittest
       run: |
         alembic upgrade head
-        python -m unittest discover tests/
+        python -m unittest discover test
