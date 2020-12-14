@@ -3,8 +3,8 @@
 A chess engine called _Andoma_ (after its authors _Andrew_ and _Roma_).
 
 It implements:
-- Alpha-beta pruning for move searching
-- Move ordering based off heuristics like captures and promotions
+- [Alpha-beta pruning](https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning) for move searching
+- [Move ordering](https://www.chessprogramming.org/Move_Ordering) based off heuristics like captures and promotions
 - Tomasz Michniewski's [Simplified Evaluation Function](https://www.chessprogramming.org/Simplified_Evaluation_Function) for board evaluation and piece-square tables
 - A slice of the Universal Chess Interface (UCI) to allow challenges via lichess.org
 
