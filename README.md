@@ -6,6 +6,7 @@ A chess engine called _Andoma_ (after its authors _Andrew_ and _Roma_).
 
 It implements:
 - Alpha-beta pruning for move searching
+- Move ordering based off heuristics like captures and promotions
 - Tomasz Michniewski's [Simplified Evaluation Function](https://www.chessprogramming.org/Simplified_Evaluation_Function) for board evaluation and piece-square tables
 - A slice of the Universal Chess Interface (UCI) to allow challenges via lichess.org
 
@@ -20,7 +21,7 @@ uci
 # uciok
 position startpos moves e2e4
 go
-# bestmove h7h5
+# bestmove g8f6
 ```
 
 <br>

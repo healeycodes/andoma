@@ -23,7 +23,6 @@ def talk():
         msg = input()
         print(f'>>> {msg}', file=sys.stderr)
         command(depth, board, msg)
-        print(board.fen())
 
 
 def command(depth, board, msg):
@@ -34,7 +33,7 @@ def command(depth, board, msg):
         print("id name Andoma")  # Andrew/Roma -> And/oma
         print("id author Andrew Healey & Roma Parramore")
         print("uciok")
-        return False
+        return
 
     if msg == 'isready':
         print('readyok')
