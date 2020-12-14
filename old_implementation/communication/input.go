@@ -75,7 +75,7 @@ func Commands(text string, match *match) bool {
 	if strings.Contains(text[:2], "go") {
 		fen, _ := chess.FEN(match.fen)
 		game := chess.NewGame(fen)
-		fmt.Println("bestmove", movegeneration.BestMove(game, depth))
+		fmt.Println("bestmove", movegeneration.BestMove(depth, game, true))
 		return false
 	}
 

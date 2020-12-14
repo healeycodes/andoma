@@ -32,6 +32,8 @@ func EvaluateBoard(game *chess.Game) int {
 }
 
 func evaluatePiece(square int, piece chess.Piece, endgame bool) int {
+	var value int
+
 	// Piece weights
 	P := 100
 	N := 320
@@ -44,38 +46,41 @@ func evaluatePiece(square int, piece chess.Piece, endgame bool) int {
 	switch piece {
 	case chess.WhiteKing:
 		if endgame {
-			return kingEndGame[square] + K
+			value = kingEndGame[square] + K
 		}
-		return kingMidGame[square] + K
+		value = kingMidGame[square] + K
 	case chess.WhiteQueen:
-		return queen[square] + Q
+		value = queen[square] + Q
 	case chess.WhiteRook:
-		return rook[square] + R
+		value = rook[square] + R
 	case chess.WhiteBishop:
-		return bishop[square] + B
+		value = bishop[square] + B
 	case chess.WhiteKnight:
-		return knight[square] + N
+		value = knight[square] + N
 	case chess.WhitePawn:
-		return pawn[square] + P
+		value = pawn[square] + P
 	case chess.BlackKing:
 		if endgame {
-			return kingEndGame[len(kingEndGame)-square-1] + K
+			value = kingEndGame[len(kingEndGame)-square-1] + K
 		}
-		return kingMidGame[len(kingMidGame)-square-1] + K
+		value = kingMidGame[len(kingMidGame)-square-1] + K
 	case chess.BlackQueen:
-		return queen[len(queen)-square-1] + Q
+		value = queen[len(queen)-square-1] + Q
 	case chess.BlackRook:
-		return rook[len(rook)-square-1] + R
+		value = rook[len(rook)-square-1] + R
 	case chess.BlackBishop:
-		return bishop[len(bishop)-square-1] + B
+		value = bishop[len(bishop)-square-1] + B
 	case chess.BlackKnight:
-		return knight[len(knight)-square-1] + N
+		value = knight[len(knight)-square-1] + N
 	case chess.BlackPawn:
-		return pawn[len(pawn)-square-1] + P
+		value = pawn[len(pawn)-square-1] + P
 	}
 
-	println("Shouldn't be reachable")
-	return 0
+	if piece.Color() == 1 {
+		return value
+	}
+
+	return -value
 }
 
 // Tables lifted from:

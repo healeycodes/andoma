@@ -1,6 +1,6 @@
 # ♟ Andoma
 
-[![](https://github.com/healeycodes/andoma/workflows/Go/badge.svg)](https://github.com/healeycodes/andoma/actions?query=workflow%3AGo)
+[![](https://github.com/healeycodes/andoma/workflows/python-app/badge.svg)](https://github.com/healeycodes/andoma/actions?query=workflow%3Apython-app)
 
 A chess engine called _Andoma_ (after its authors _Andrew_ and _Roma_).
 
@@ -35,11 +35,7 @@ The UCI protocol slice that's implemented by this engine means you can play it v
 
 Start the engine with:
 
-`go run main.go`
-
-Build with:
-
-`go build`
+`python run main.py`
 
 <br>
 
@@ -47,4 +43,4 @@ Build with:
 
 There are some unit tests you can run with:
 
-`go test ./...`
+`python -m unittest`
