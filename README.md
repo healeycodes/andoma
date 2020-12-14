@@ -1,7 +1,5 @@
 # ♟ Andoma
 
-[![](https://github.com/healeycodes/andoma/workflows/python-app/badge.svg)](https://github.com/healeycodes/andoma/actions?query=workflow%3Apython-app)
-
 A chess engine called _Andoma_ (after its authors _Andrew_ and _Roma_).
 
 It implements:
