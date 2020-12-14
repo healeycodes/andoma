@@ -4,18 +4,11 @@ import argparse
 from movegeneration import next_move
 
 
-def get_depth():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '--depth',
-        default=3,
-        help='provide an integer (default: 3)'
-    )
-    args = parser.parse_args()
-    return args.depth
-
-
 def talk():
+    '''
+    The main input/output loop.
+    This implements a slice of the UCI protocol.
+    '''
     board = chess.Board()
     depth = get_depth()
 
@@ -26,6 +19,10 @@ def talk():
 
 
 def command(depth, board, msg):
+    '''
+    Accept UCI commands and respond.
+    The board state is also updated.
+    '''
     if msg == 'quit':
         quit()
 
@@ -60,3 +57,14 @@ def command(depth, board, msg):
         move = next_move(depth, board)
         print(move)
         return
+
+
+def get_depth():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--depth',
+        default=3,
+        help='provide an integer (default: 3)'
+    )
+    args = parser.parse_args()
+    return args.depth

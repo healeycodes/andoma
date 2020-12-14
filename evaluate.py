@@ -1,6 +1,7 @@
 import chess
 
 # this module implement's Tomasz Michniewski's Simplified Evaluation Function
+# https://www.chessprogramming.org/Simplified_Evaluation_Function
 
 piece_value = {
     chess.PAWN: 100,
@@ -110,7 +111,7 @@ def move_value(board, move):
 
 def capture_score(board, move):
     '''
-    Given a capturing move, weight the trade being
+    Given a capturing move, weight the trade being made.
     '''
     if board.is_en_passant(move):
         return piece_value[chess.PAWN]
@@ -120,6 +121,9 @@ def capture_score(board, move):
 
 
 def evaluate_board(board):
+    '''
+    Evaluate the value of a board.
+    '''
     total = 0
     queens = 0
 
@@ -145,7 +149,7 @@ def evaluate_board(board):
         if piece.piece_type == chess.QUEEN:
             mapping = queenEval
         if piece.piece_type == chess.KING:
-            # use end game piece table if neither side has a queen
+            # use end game piece-square tables if neither side has a queen
             if queens == 0:
                 mapping = kingEvalEndGameWhite if piece.color == chess.WHITE else kingEvalEndGameBlack
             else:
