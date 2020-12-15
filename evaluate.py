@@ -95,22 +95,30 @@ kingEvalEndGameWhite = [
 kingEvalEndGameBlack = list(reversed(kingEvalEndGameWhite))
 
 
-def move_value(board, move):
+def move_value(board, move, queens):
     '''
     How good is a move?
     A promotion is great.
     A weaker piece taking a stronger piece is good.
     A stronger piece taking a weaker piece is bad.
-    Otherwise, a move is neutral.
+    Also consider the position change via piece-square table.
     '''
     if move.promotion != None:
         return -float('inf')
+
+    _from = board.piece_at(move.from_square)
+    _from_value = evaluate_piece(_from, move.to_square, queens)
+    _to_value = evaluate_piece(_from, move.from_square, queens)
+    position_change = _from_value - _to_value
+
+    capture_value = 0
     if board.is_capture(move):
-        return -capture_score(board, move)
-    return float('inf')
+        capture_value = evaluate_capture(board, move)
+
+    return -(capture_value + position_change)
 
 
-def capture_score(board, move):
+def evaluate_capture(board, move):
     '''
     Given a capturing move, weight the trade being made.
     '''
@@ -121,42 +129,66 @@ def capture_score(board, move):
     return piece_value[_to] - piece_value[_from]
 
 
+def evaluate_piece(piece, square, end_game):
+    piece_type = piece.piece_type
+    mapping = None
+    if piece_type == chess.PAWN:
+        mapping = pawnEvalWhite if piece.color == chess.WHITE else pawnEvalBlack
+    if piece_type == chess.KNIGHT:
+        mapping = knightEval
+    if piece_type == chess.BISHOP:
+        mapping = bishopEvalWhite if piece.color == chess.WHITE else bishopEvalBlack
+    if piece_type == chess.ROOK:
+        mapping = rookEvalWhite if piece.color == chess.WHITE else rookEvalBlack
+    if piece_type == chess.QUEEN:
+        mapping = queenEval
+    if piece_type == chess.KING:
+        # use end game piece-square tables if neither side has a queen
+        if end_game:
+            mapping = kingEvalEndGameWhite if piece.color == chess.WHITE else kingEvalEndGameBlack
+        else:
+            mapping = kingEvalWhite if piece.color == chess.WHITE else kingEvalBlack
+
+    return mapping[square]
+
+
 def evaluate_board(board):
     '''
-    Evaluate the value of a board.
+    Evaluate a board.
     '''
     total = 0
+    end_game = check_end_game(board)
+
+    for square in chess.SQUARES:
+        piece = board.piece_at(square)
+        if not piece:
+            continue
+
+        value = piece_value[piece.piece_type] + \
+            evaluate_piece(piece, square, end_game)
+        total += value if piece.color == chess.WHITE else -value
+
+    return total
+
+
+def check_end_game(board):
+    '''
+    Are we in the end game?
+    Per Michniewski:
+    - Both sides have no queens or
+    - Every side which has a queen has additionally no other pieces or one minorpiece maximum.
+    '''
     queens = 0
+    minors = 0
 
     for square in chess.SQUARES:
         piece = board.piece_at(square)
         if piece and piece == chess.QUEEN:
             queens += 1
+        if piece and piece != chess.KING:
+            minors += 1
 
-    for square, idx in enumerate(chess.SQUARES):
-        piece = board.piece_at(square)
-        if not piece:
-            continue
+    if queens == 0 or queens == 2 and minors <= 1:
+        return True
 
-        mapping = None
-        if piece.piece_type == chess.PAWN:
-            mapping = pawnEvalWhite if piece.color == chess.WHITE else pawnEvalBlack
-        if piece.piece_type == chess.KNIGHT:
-            mapping = knightEval
-        if piece.piece_type == chess.BISHOP:
-            mapping = bishopEvalWhite if piece.color == chess.WHITE else bishopEvalBlack
-        if piece.piece_type == chess.ROOK:
-            mapping = rookEvalWhite if piece.color == chess.WHITE else rookEvalBlack
-        if piece.piece_type == chess.QUEEN:
-            mapping = queenEval
-        if piece.piece_type == chess.KING:
-            # use end game piece-square tables if neither side has a queen
-            if queens == 0:
-                mapping = kingEvalEndGameWhite if piece.color == chess.WHITE else kingEvalEndGameBlack
-            else:
-                mapping = kingEvalWhite if piece.color == chess.WHITE else kingEvalBlack
-
-        value = piece_value[piece.piece_type] + mapping[idx]
-        total += value if piece.color == chess.WHITE else -value
-
-    return total
+    return False

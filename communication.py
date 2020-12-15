@@ -67,4 +67,4 @@ def get_depth():
         help='provide an integer (default: 3)'
     )
     args = parser.parse_args()
-    return args.depth
+    return int(args.depth)

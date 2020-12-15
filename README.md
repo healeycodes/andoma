@@ -42,4 +42,4 @@ Start the engine with:
 
 There are some unit tests you can run with:
 
-`python -m unittest`
+`python -m unittest discover test/`
