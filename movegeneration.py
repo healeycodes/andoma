@@ -6,6 +6,9 @@ from evaluate import evaluate_board, move_value
 # - end game specific evaluation
 
 def next_move(depth, board):
+    '''
+    What is the next best move?
+    '''
     return minimax_root(depth, board, True)
 
 

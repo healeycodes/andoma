@@ -100,6 +100,7 @@ def move_value(board, move):
     How good is a move?
     A promotion is great.
     A weaker piece taking a stronger piece is good.
+    A stronger piece taking a weaker piece is bad.
     Otherwise, a move is neutral.
     '''
     if move.promotion != None:
