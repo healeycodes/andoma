@@ -40,6 +40,6 @@ Start the engine with:
 
 ## Tests
 
-There are some unit tests you can run with:
+There are unit tests for the engine and the evaluation module:
 
 `python -m unittest discover test/`
