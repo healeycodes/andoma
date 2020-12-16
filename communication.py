@@ -45,7 +45,6 @@ def command(depth, board, msg):
         board.set_fen(chess.STARTING_FEN)
         for move in moves:
             board.push(chess.Move.from_uci(move))
-            print(board.peek())
         return
 
     if 'position fen' in msg:

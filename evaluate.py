@@ -95,7 +95,7 @@ kingEvalEndGameWhite = [
 kingEvalEndGameBlack = list(reversed(kingEvalEndGameWhite))
 
 
-def move_value(board, move, queens):
+def move_value(board, move, endgame):
     '''
     How good is a move?
     A promotion is great.
@@ -107,8 +107,8 @@ def move_value(board, move, queens):
         return -float('inf')
 
     _from = board.piece_at(move.from_square)
-    _from_value = evaluate_piece(_from, move.to_square, queens)
-    _to_value = evaluate_piece(_from, move.from_square, queens)
+    _from_value = evaluate_piece(_from, move.to_square, endgame)
+    _to_value = evaluate_piece(_from, move.from_square, endgame)
     position_change = _from_value - _to_value
 
     capture_value = 0
@@ -183,12 +183,12 @@ def check_end_game(board):
 
     for square in chess.SQUARES:
         piece = board.piece_at(square)
-        if piece and piece == chess.QUEEN:
+        if piece and piece.piece_type == chess.QUEEN:
             queens += 1
-        if piece and piece != chess.KING:
+        if piece and (piece.piece_type == chess.BISHOP or piece.piece_type == chess.KNIGHT):
             minors += 1
 
-    if queens == 0 or queens == 2 and minors <= 1:
+    if queens == 0 or (queens == 2 and minors <= 1):
         return True
 
     return False
