@@ -26,6 +26,10 @@ go
 # bestmove g8f6
 ```
 
+See the [UCI interface doc](https://github.com/healeycodes/andoma/blob/main/uci-interface.txt) for more information on communicating with the engine.
+
+Debug information (the number of postions searched, the time taken) is sent to stderr. The engine's response is sent to stdout.
+
 <br>
 
 ## Lichess.org
