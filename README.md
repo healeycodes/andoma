@@ -1,4 +1,8 @@
+![Unit tests and puzzles](https://github.com/healeycodes/andoma/workflows/Unit%20tests%20and%20puzzles/badge.svg)
+
 # ♟ Andoma
+
+<br>
 
 A chess engine called _Andoma_ (after its authors _Andrew_ and _Roma_).
 
