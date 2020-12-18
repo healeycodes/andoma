@@ -103,7 +103,7 @@ def move_value(board, move, endgame):
     A stronger piece taking a weaker piece is bad.
     Also consider the position change via piece-square table.
     '''
-    if move.promotion != None:
+    if move.promotion is not None:
         return -float('inf')
 
     _from = board.piece_at(move.from_square)

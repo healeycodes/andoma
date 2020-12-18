@@ -38,7 +38,6 @@ class TestCommunication(unittest.TestCase):
             # black will trade a bishop for a queen
             self.assertEqual(patched_output.getvalue().strip(), 'g7c3')
 
-
         board = chess.Board()
         with patch('sys.stdout', new=StringIO()) as patched_output:
             command(

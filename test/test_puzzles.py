@@ -1,7 +1,5 @@
 import chess
 import unittest
-from io import StringIO
-from unittest.mock import patch
 from movegeneration import next_move
 
 
