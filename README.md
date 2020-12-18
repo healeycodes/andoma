@@ -48,6 +48,6 @@ Start the engine with:
 
 ## Tests
 
-There are unit tests for the engine and the evaluation module:
+There are unit tests for the engine and evaluation modules, and mate-in-two/mate-in-three puzzles are being added.
 
 `python -m unittest discover test/`
