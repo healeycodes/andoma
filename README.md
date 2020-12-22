@@ -1,6 +1,7 @@
 ![Unit tests and puzzles](https://github.com/healeycodes/andoma/workflows/Unit%20tests%20and%20puzzles/badge.svg)
 
 # ♟ Andoma
+> My blog post: [Building My Own Chess Engine](https://healeycodes.com/building-my-own-chess-engine/)
 
 <br>
 
