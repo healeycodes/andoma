@@ -106,10 +106,10 @@ def move_value(board, move, endgame):
     if move.promotion is not None:
         return -float('inf')
 
-    _from = board.piece_at(move.from_square)
-    _from_value = evaluate_piece(_from, move.to_square, endgame)
-    _to_value = evaluate_piece(_from, move.from_square, endgame)
-    position_change = _from_value - _to_value
+    _piece = board.piece_at(move.from_square)
+    _from_value = evaluate_piece(_piece, move.from_square, endgame)
+    _to_value = evaluate_piece(_piece, move.to_square, endgame)
+    position_change = _to_value - _from_value
 
     capture_value = 0
     if board.is_capture(move):

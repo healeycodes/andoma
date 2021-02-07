@@ -27,15 +27,17 @@ go
 # bestmove g8f6
 ```
 
-See the [UCI interface doc](https://github.com/healeycodes/andoma/blob/main/uci-interface.txt) for more information on communicating with the engine.
+See the [UCI interface doc](https://github.com/healeycodes/andoma/blob/main/uci-interface.md) for more information on communicating with the engine.
 
-Debug information (the number of postions searched, the time taken) is sent to stderr. The engine's response is sent to stdout.
+Debug information (the number of positions searched, the time taken) is sent to stderr. The engine's response is sent to stdout.
 
 <br>
 
 ## Lichess.org
 
 The UCI protocol slice that's implemented by this engine means you can play it via lichess.org by using [ShailChoksi/lichess-bot](https://github.com/ShailChoksi/lichess-bot) (a bridge between Lichess API and chess engines) and a BOT account.
+
+The engine file required by `lichess-bot` may be generated using [pyinstaller](https://www.pyinstaller.org/).
 
 <br>
 
