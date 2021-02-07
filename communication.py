@@ -54,7 +54,7 @@ def command(depth, board, msg):
 
     if msg[0:2] == 'go':
         move = next_move(depth, board)
-        print(move)
+        print(f'bestmove {move}')
         return
 
 
