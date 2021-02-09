@@ -115,7 +115,11 @@ def move_value(board, move, endgame):
     if board.is_capture(move):
         capture_value = evaluate_capture(board, move)
 
-    return -(capture_value + position_change)
+    current_move_value = capture_value + position_change
+    if board.turn == chess.BLACK:
+        current_move_value = -current_move_value
+
+    return current_move_value
 
 
 def evaluate_capture(board, move):
@@ -154,7 +158,11 @@ def evaluate_piece(piece, square, end_game):
 
 def evaluate_board(board):
     '''
-    Evaluate a board.
+    Evaluates the full board and determines which player is in a most favorable position.
+    The sign indicates the side:
+        (+) for white
+        (-) for black
+    The magnitude, how big of an advantage that player has
     '''
     total = 0
     end_game = check_end_game(board)
