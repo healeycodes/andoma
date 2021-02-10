@@ -19,7 +19,10 @@ class TestCommunication(unittest.TestCase):
         self.assertEqual(board.fen(),
                          'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1')
 
-    def test_go_command(self):
+    def test_go_command_black(self):
+        '''
+        Test go command with Andoma playing with black pieces
+        '''
         board = chess.Board()
         with patch('sys.stdout', new=StringIO()) as patched_output:
             command(
@@ -46,3 +49,34 @@ class TestCommunication(unittest.TestCase):
 
             # black will threaten a bishop with a pawn (a very strong but not instantly obvious move)
             self.assertEqual(patched_output.getvalue().strip(), 'bestmove c5c4')
+
+    def test_go_command_white(self):
+        '''
+        Test go command with Andoma playing with white pieces
+        '''
+        board = chess.Board()
+        with patch('sys.stdout', new=StringIO()) as patched_output:
+            command(
+                3, board, 'position fen 6r1/8/R5pk/1P3p1p/3bn2P/1B3RP1/6K1/8 w - - 0 1')
+            command(3, board, 'go')
+
+            # white bishop should take a undefended rook
+            self.assertEqual(patched_output.getvalue().strip(), 'bestmove b3g8')
+
+        board = chess.Board()
+        with patch('sys.stdout', new=StringIO()) as patched_output:
+            command(
+                3, board, 'position fen rnb1kbnr/p1ppppqp/1p4p1/8/2P5/1P6/PB1PPPPP/RN2KBNR w KQkq - 0 1')
+            command(3, board, 'go')
+
+            # white will trade a bishop for a queen
+            self.assertEqual(patched_output.getvalue().strip(), 'bestmove b2g7')
+
+        board = chess.Board()
+        with patch('sys.stdout', new=StringIO()) as patched_output:
+            command(
+                3, board, 'position fen r2qkb1r/pppn1pp1/2n1b2p/4p3/3pPP2/3P2P1/PPPBN1BP/R2QK1NR w KQkq - 0 1')
+            command(3, board, 'go')
+
+            # white will threaten a bishop with a pawn (a very strong but not instantly obvious move)
+            self.assertEqual(patched_output.getvalue().strip(), 'bestmove f4f5')
