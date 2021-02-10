@@ -24,7 +24,7 @@ def command(depth, board, msg):
     The board state is also updated.
     '''
     if msg == 'quit':
-        quit()
+        sys.exit()
 
     if msg == 'uci':
         print("id name Andoma")  # Andrew/Roma -> And/oma
