@@ -80,3 +80,16 @@ class TestCommunication(unittest.TestCase):
 
             # white will threaten a bishop with a pawn (a very strong but not instantly obvious move)
             self.assertEqual(patched_output.getvalue().strip(), 'bestmove f4f5')
+
+    def test_draw(self):
+        '''
+        Test go command with Andoma on the verge of drawing due to threefold repetition
+        '''
+        board = chess.Board()
+        with patch('sys.stdout', new=StringIO()) as patched_output:
+            command(
+                3, board, 'position startpos moves c2c4 d7d6 d1a4 c8d7 a4a5 b8c6 a5b5 a7a6 b5b7 c6e5 b1c3 e5c4 g1f3 d7c8 b7a8 g8f6 a8c6 c8d7 c6c4 d6d5 c4a6 e7e6 f3e5 f8d6 e5d7 d8d7 a6a8 d7d8 a8c6 d8d7 c6a8 d7d8 a8c6 d8d7')
+            command(3, board, 'go')
+
+            # Bot is in a favorable position, should avoid threefold repetition
+            self.assertNotEqual(patched_output.getvalue().strip(), 'bestmove c6a8')

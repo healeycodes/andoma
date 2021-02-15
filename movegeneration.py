@@ -48,8 +48,14 @@ def minimax_root(depth, board):
     moves = get_ordered_moves(board)
     for move in moves:
         board.push(move)
-        value = minimax(depth - 1, board, -float('inf'),
-                        float('inf'), not maximize)
+        # Checking if draw can be claimed at this level, because the threefold repetition check
+        # can be expensive. This should help the bot avoid a draw if it's not favorable
+        # https://python-chess.readthedocs.io/en/latest/core.html#chess.Board.can_claim_draw
+        if board.can_claim_draw():
+            value = 0
+        else:
+            value = minimax(depth - 1, board, -float('inf'),
+                            float('inf'), not maximize)
         board.pop()
         if maximize and value >= best_move:
             best_move = value
@@ -64,10 +70,15 @@ def minimax_root(depth, board):
 def minimax(depth, board, alpha, beta, is_maximising_player):
     debug['positions'] += 1
 
-    if depth == 0 or board.is_game_over():
-        if board.is_checkmate():
-            # The previous move resulted in checkmate
-            return -float('inf') if is_maximising_player else float('inf')
+    if board.is_checkmate():
+        # The previous move resulted in checkmate
+        return -float('inf') if is_maximising_player else float('inf')
+    # When the game is over and it's not a checkmate it's a draw
+    # In this case, don't evaluate. Just return a neutral result: zero
+    elif board.is_game_over():
+        return 0
+
+    if depth == 0:
         return evaluate_board(board)
 
     if is_maximising_player:
