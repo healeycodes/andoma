@@ -41,11 +41,31 @@ The engine file required by `lichess-bot` may be generated using [pyinstaller](h
 
 <br>
 
-## Development
+## Use it!
 
 Start the engine with:
 
-`python run main.py`
+`python main.py`
+
+Give it a fen:
+
+`position fen rnbqk1nr/p1ppppbp/1p4p1/8/2P5/2Q5/PP1PPPPP/RNB1KBNR b KQkq - 0 1`
+
+Get a move:
+
+`go`
+
+<hr>
+
+```bash
+$ python  main.py
+position fen rnbqk1nr/p1ppppbp/1p4p1/8/2P5/2Q5/PP1PPPPP/RNB1KBNR b KQkq - 0 1
+>>> position fen rnbqk1nr/p1ppppbp/1p4p1/8/2P5/2Q5/PP1PPPPP/RNB1KBNR b KQkq - 0 1
+go
+>>> go
+>>> {'positions': 9128, 'time': 1.6894989013671875}
+bestmove g7c3
+```
 
 <br>
 
