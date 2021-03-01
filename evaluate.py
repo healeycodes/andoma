@@ -104,7 +104,7 @@ def move_value(board, move, endgame):
     Also consider the position change via piece-square table.
     '''
     if move.promotion is not None:
-        return -float('inf')
+        return -float('inf') if board.turn == chess.BLACK else float('inf')
 
     _piece = board.piece_at(move.from_square)
     _from_value = evaluate_piece(_piece, move.from_square, endgame)
