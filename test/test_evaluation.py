@@ -29,10 +29,17 @@ class TestEvaluation(unittest.TestCase):
         pawn_for_queen = move_value(board, move, check_end_game(board))
         self.assertEqual(pawn_for_queen, 775, f'Pawn for Queen {pawn_for_queen} but it should be 775')
 
+        board = chess.Board(
+            '8/4P3/2k5/8/8/3K4/8/8 w - - 0 1')
+        move = chess.Move.from_uci('e7e8q')
+        # pawn promotes
+        pawn_promotes = move_value(board, move, check_end_game(board))
+        self.assertEqual(pawn_promotes, float('inf'), f'Pawn promotes was {pawn_promotes} but it should be inf')
+
         worst_to_best = list(
-            sorted([pawn_for_queen, pawn_for_pawn, queen_for_pawn]))
+            sorted([pawn_promotes, pawn_for_queen, pawn_for_pawn, queen_for_pawn]))
         self.assertEqual(
-            worst_to_best, [queen_for_pawn, pawn_for_pawn, pawn_for_queen])
+            worst_to_best, [queen_for_pawn, pawn_for_pawn, pawn_for_queen, pawn_promotes])
 
     def test_move_value_black(self):
         '''
