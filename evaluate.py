@@ -107,9 +107,12 @@ def move_value(board: chess.Board, move: chess.Move, endgame: bool) -> float:
         return -float('inf') if board.turn == chess.BLACK else float('inf')
 
     _piece = board.piece_at(move.from_square)
-    _from_value = evaluate_piece(_piece, move.from_square, endgame)
-    _to_value = evaluate_piece(_piece, move.to_square, endgame)
-    position_change = _to_value - _from_value
+    if _piece:
+        _from_value = evaluate_piece(_piece, move.from_square, endgame)
+        _to_value = evaluate_piece(_piece, move.to_square, endgame)
+        position_change = _to_value - _from_value
+    else:
+        raise Exception(f'A piece was expected at {move.from_square}')
 
     capture_value = 0.0
     if board.is_capture(move):
@@ -128,12 +131,15 @@ def evaluate_capture(board: chess.Board, move: chess.Move) -> float:
     '''
     if board.is_en_passant(move):
         return piece_value[chess.PAWN]
-    _to = board.piece_at(move.to_square).piece_type
-    _from = board.piece_at(move.from_square).piece_type
-    return piece_value[_to] - piece_value[_from]
+    _to = board.piece_at(move.to_square)
+    _from = board.piece_at(move.from_square)
+    if _to is None or _from is None:
+        raise Exception(
+            f'Pieces were expected at _both_ {move.to_square} and {move.from_square}')
+    return piece_value[_to.piece_type] - piece_value[_from.piece_type]
 
 
-def evaluate_piece(piece: chess.Piece, square: chess.Square, end_game: bool):
+def evaluate_piece(piece: chess.Piece, square: chess.Square, end_game: bool) -> int:
     piece_type = piece.piece_type
     mapping = []
     if piece_type == chess.PAWN:
