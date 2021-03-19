@@ -12,10 +12,40 @@ It implements:
 - [Move ordering](https://www.chessprogramming.org/Move_Ordering) based off heuristics like captures and promotions
 - Tomasz Michniewski's [Simplified Evaluation Function](https://www.chessprogramming.org/Simplified_Evaluation_Function) for board evaluation and piece-square tables
 - A slice of the Universal Chess Interface (UCI) to allow challenges via lichess.org
+- A command-line user interface
 
 <br>
 
-An example interaction with the engine (responses are commented):
+## Use it via command-line
+
+```bash
+python ui.py
+
+Start as [w]hite or [b]lack:
+w
+
+  8 ♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖
+  7 ♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙
+  6 · · · · · · · ·
+  5 · · · · · · · ·
+  4 · · · · · · · ·
+  3 · · · · · · · ·
+  2 ♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟
+  1 ♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜
+    a b c d e f g h
+
+Enter a move like g1h3:
+```
+
+<br>
+
+## Use it with an engine
+
+Start the engine with:
+
+`python main.py`
+
+An example interaction with the engine (responses have `#`):
 
 ```bash
 uci
@@ -26,6 +56,12 @@ position startpos moves e2e4
 go
 # bestmove g8f6
 ```
+
+Also accepts a FEN string:
+
+`position fen rnbqk1nr/p1ppppbp/1p4p1/8/2P5/2Q5/PP1PPPPP/RNB1KBNR b KQkq - 0 1`
+
+<br>
 
 See the [UCI interface doc](https://github.com/healeycodes/andoma/blob/main/uci-interface.md) for more information on communicating with the engine.
 
@@ -41,36 +77,10 @@ The engine file required by `lichess-bot` may be generated using [pyinstaller](h
 
 <br>
 
-## Use it!
-
-Start the engine with:
-
-`python main.py`
-
-Give it a fen:
-
-`position fen rnbqk1nr/p1ppppbp/1p4p1/8/2P5/2Q5/PP1PPPPP/RNB1KBNR b KQkq - 0 1`
-
-Get a move:
-
-`go`
-
-<hr>
-
-```bash
-$ python  main.py
-position fen rnbqk1nr/p1ppppbp/1p4p1/8/2P5/2Q5/PP1PPPPP/RNB1KBNR b KQkq - 0 1
->>> position fen rnbqk1nr/p1ppppbp/1p4p1/8/2P5/2Q5/PP1PPPPP/RNB1KBNR b KQkq - 0 1
-go
->>> go
->>> {'positions': 9128, 'time': 1.6894989013671875}
-bestmove g7c3
-```
-
-<br>
-
 ## Tests
 
-There are unit tests for the engine and evaluation modules, and mate-in-two/mate-in-three puzzles are being added.
+There are unit tests for the engine, UI, and evaluation modules. Mate-in-two/mate-in-three puzzles are being added.
 
 `python -m unittest discover test/`
+
+`mypy .`
