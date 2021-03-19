@@ -20,21 +20,24 @@ class TestEvaluation(unittest.TestCase):
         # queen takes pawn
         queen_for_pawn = move_value(board, move, check_end_game(board))
 
-        self.assertEqual(queen_for_pawn, -800, f'Queen for pawn {queen_for_pawn} but it should be -800')
+        self.assertEqual(
+            queen_for_pawn, -800, f'Queen for pawn {queen_for_pawn} but it should be -800')
 
         board = chess.Board(
             'rnb1kbnr/ppp1pppp/8/3p1q2/4P3/3P1P2/PPP1B1PP/RNBQK1NR w KQkq - 0 1')
         move = chess.Move.from_uci('e4f5')
         # pawn takes queen
         pawn_for_queen = move_value(board, move, check_end_game(board))
-        self.assertEqual(pawn_for_queen, 775, f'Pawn for Queen {pawn_for_queen} but it should be 775')
+        self.assertEqual(
+            pawn_for_queen, 775, f'Pawn for Queen {pawn_for_queen} but it should be 775')
 
         board = chess.Board(
             '8/4P3/2k5/8/8/3K4/8/8 w - - 0 1')
         move = chess.Move.from_uci('e7e8q')
         # pawn promotes
         pawn_promotes = move_value(board, move, check_end_game(board))
-        self.assertEqual(pawn_promotes, float('inf'), f'Pawn promotes was {pawn_promotes} but it should be inf')
+        self.assertEqual(pawn_promotes, float(
+            'inf'), f'Pawn promotes was {pawn_promotes} but it should be inf')
 
         worst_to_best = list(
             sorted([pawn_promotes, pawn_for_queen, pawn_for_pawn, queen_for_pawn]))
@@ -50,14 +53,16 @@ class TestEvaluation(unittest.TestCase):
         move = chess.Move.from_uci('d5e4')
         # pawn takes pawn
         pawn_for_pawn = move_value(board, move, check_end_game(board))
-        self.assertEqual(pawn_for_pawn, 5, f'Pawn for pawn {pawn_for_pawn} but it should be 5')
+        self.assertEqual(pawn_for_pawn, 5,
+                         f'Pawn for pawn {pawn_for_pawn} but it should be 5')
 
         board = chess.Board(
             'rnb1kbnr/ppp1pppp/8/3p1q2/4P3/3P1P2/PPP1B1PP/RNBQK1NR b KQkq - 0 1')
         move = chess.Move.from_uci('f5e4')
         # queen takes pawn
         queen_for_pawn = move_value(board, move, check_end_game(board))
-        self.assertEqual(queen_for_pawn, 800, f'Queen for pawn {queen_for_pawn} but it should be 800')
+        self.assertEqual(
+            queen_for_pawn, 800, f'Queen for pawn {queen_for_pawn} but it should be 800')
 
         board = chess.Board(
             'rnbqkbnr/ppp1pppp/8/3p4/2Q1P3/3P1P2/PPP1B1PP/RNB1K1NR b KQkq - 0 1')
@@ -65,7 +70,8 @@ class TestEvaluation(unittest.TestCase):
         # pawn takes queen
         pawn_for_queen = move_value(board, move, check_end_game(board))
 
-        self.assertEqual(pawn_for_queen, -775, f'Pawn for queen {pawn_for_queen} but it should be -775')
+        self.assertEqual(
+            pawn_for_queen, -775, f'Pawn for queen {pawn_for_queen} but it should be -775')
 
         best_to_worst = list(
             sorted([pawn_for_queen, pawn_for_pawn, queen_for_pawn]))
