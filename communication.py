@@ -18,7 +18,7 @@ def talk():
         command(depth, board, msg)
 
 
-def command(depth, board, msg):
+def command(depth: int, board: chess.Board, msg: str):
     '''
     Accept UCI commands and respond.
     The board state is also updated.
@@ -53,12 +53,12 @@ def command(depth, board, msg):
         return
 
     if msg[0:2] == 'go':
-        move = next_move(depth, board)
-        print(f'bestmove {move}')
+        _move = next_move(depth, board)
+        print(f'bestmove {_move}')
         return
 
 
-def get_depth():
+def get_depth() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '--depth',
@@ -66,4 +66,4 @@ def get_depth():
         help='provide an integer (default: 3)'
     )
     args = parser.parse_args()
-    return int(args.depth)
+    return max([1, int(args.depth)])
