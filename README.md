@@ -18,9 +18,11 @@ It implements:
 
 ## Use it via command-line
 
-```bash
-python ui.py
+Start the engine with:
 
+`python ui.py`
+
+```bash
 Start as [w]hite or [b]lack:
 w
 
