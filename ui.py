@@ -30,8 +30,8 @@ def render(board: chess.Board) -> str:
     Print a side-relative chess board with special chess characters.
     '''
     board_string = list(str(board))
-    uni_pieces = {'R': '♜', 'N': '♞', 'B': '♝', 'Q': '♛', 'K': '♚', 'P': '♟',
-                  'r': '♖', 'n': '♘', 'b': '♗', 'q': '♕', 'k': '♔', 'p': '♙', '.': '·'}
+    uni_pieces = {'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔', 'P': '♙',
+                  'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟', '.': '·'}
     for idx, char in enumerate(board_string):
         if char in uni_pieces:
             board_string[idx] = uni_pieces[char]
@@ -45,21 +45,17 @@ def render(board: chess.Board) -> str:
     return '\n' + '\n'.join(display)
 
 
-def get_move(board: chess.Board, legal_reminder=False) -> chess.Move:
+def get_move(board: chess.Board) -> chess.Move:
     '''
     Try (and keep trying) to get a legal next move from the user.
     Play the move by mutating the game board.
     '''
-    if legal_reminder:
-        move = input(
-            f'\nEnter a move like {list(board.legal_moves)[0]}:\n')
-    else:
-        move = input('My move:\n')
+    move = input(f'\nYour move (e.g. {list(board.legal_moves)[0]}):\n')
 
     for legal_move in board.legal_moves:
         if move == str(legal_move):
             return legal_move
-    return get_move(board, legal_reminder=True)
+    return get_move(board)
 
 
 def get_depth() -> int:
