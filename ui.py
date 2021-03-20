@@ -18,7 +18,7 @@ def start():
         board.push(get_move(board))
 
     while not board.is_game_over():
-        board.push(next_move(get_depth(), board, debug_info=False))
+        board.push(next_move(get_depth(), board, debug=False))
         print(render(board))
         board.push(get_move(board))
 
@@ -50,8 +50,11 @@ def get_move(board: chess.Board, legal_reminder=False) -> chess.Move:
     Try (and keep trying) to get a legal next move from the user.
     Play the move by mutating the game board.
     '''
-    move = input(
-        f'\nEnter a{" _legal_" if legal_reminder else ""} move like {list(board.legal_moves)[0]}:\n')
+    if legal_reminder:
+        move = input(
+            f'\nEnter a move like {list(board.legal_moves)[0]}:\n')
+    else:
+        move = input('My move:\n')
 
     for legal_move in board.legal_moves:
         if move == str(legal_move):
