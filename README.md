@@ -41,7 +41,7 @@ Enter a move like g1h3:
 
 <br>
 
-## Use it with an engine
+## Use it as a UCI engine
 
 Start the engine with:
 
