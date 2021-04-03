@@ -7,16 +7,16 @@ from ui import render, get_move
 class TestUI(unittest.TestCase):
     def test_render_displays_all_characters(self):
         board = chess.Board(chess.STARTING_FEN)
-        black_pieces = '♖♘♗♕♔♙'
-        white_pieces = '♜♞♝♛♚♟'
-        ranks = '12345678'
-        files = 'abcdefgh'
+        black_pieces = "♖♘♗♕♔♙"
+        white_pieces = "♜♞♝♛♚♟"
+        ranks = "12345678"
+        files = "abcdefgh"
 
         display = render(board)
         for char in black_pieces + white_pieces + ranks + files:
             self.assertIn(char, display)
 
-    @patch('ui.input', return_value='e2e4')
+    @patch("ui.input", return_value="e2e4")
     def test_get_move(self, input):
         board = chess.Board(chess.STARTING_FEN)
         legal_move = get_move(board)
