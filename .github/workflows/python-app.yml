@@ -33,6 +33,6 @@ jobs:
       - name: Test with unittest
         run: |
           python -m unittest discover test/
-          # mypy
-          pip install mypy==0.812
+          # use the pinned mypy version
+          pip install -r requirements-dev.txt
           mypy .
