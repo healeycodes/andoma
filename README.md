@@ -16,6 +16,12 @@ It uses Python 3.8 with type hints as well as unit + integration tests. Mypy che
 
 <br>
 
+## Install
+
+`pip install -r requirements.txt`
+
+<br>
+
 ## Use it via command-line
 
 Start the engine with:
@@ -84,5 +90,9 @@ The engine file required by `lichess-bot` may be generated using [pyinstaller](h
 There are unit tests for the engine, UI, and evaluation modules. Mate-in-two/mate-in-three puzzles are being added.
 
 `python -m unittest discover test/`
+
+Type hints:
+
+`pip install -r requirements-dev.txt`
 
 `mypy .`
