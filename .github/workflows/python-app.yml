@@ -34,5 +34,5 @@ jobs:
         run: |
           python -m unittest discover test/
           # mypy
-          pip install mypy
+          pip install mypy==0.812
           mypy .
