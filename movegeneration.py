@@ -31,7 +31,9 @@ def next_move(
     return move
 
 
-def get_ordered_moves(board: chess.Board) -> List[chess.Move]:
+def get_ordered_moves(
+    board: chess.Board, only_capture: bool = False
+) -> List[chess.Move]:
     """
     Get legal moves.
     Attempt to sort moves by best to worst.
@@ -45,6 +47,8 @@ def get_ordered_moves(board: chess.Board) -> List[chess.Move]:
     in_order = sorted(
         board.legal_moves, key=orderer, reverse=(board.turn == chess.WHITE)
     )
+    if only_capture:
+        return [move for move in in_order if board.is_capture(move)]
     return list(in_order)
 
 
@@ -88,6 +92,26 @@ def minimax_root(
     return best_move_found
 
 
+# https://www.chessprogramming.org/Quiescence_Search
+def quiesce(board: chess.Board, alpha: float, beta: float, depth: int = 1):
+    stand_pat = evaluate_board(board)
+    if stand_pat >= beta:
+        return beta
+    if alpha < stand_pat:
+        alpha = stand_pat
+    if depth > 0:
+        moves = get_ordered_moves(board, True)
+        for move in moves:
+            board.push(move)
+            score = quiesce(board, alpha, beta, depth - 1)
+            board.pop()
+            if score >= beta:
+                return beta
+            if score > alpha:
+                alpha = score
+    return alpha
+
+
 def minimax(
     depth: int,
     board: chess.Board,
@@ -107,7 +131,7 @@ def minimax(
         return 0
 
     if depth == 0:
-        return evaluate_board(board)
+        return quiesce(board, alpha, beta)
 
     # Transposition Table
     # https://www.chessprogramming.org/Transposition_Table
