@@ -1,21 +1,29 @@
 from typing import Dict, List, Any
 import chess
+import chess.polyglot
 import sys
 import time
 from evaluate import evaluate_board, move_value, check_end_game
+from transposition_table import HashEntry, TranspositionTable
 
 debug_info: Dict[str, Any] = {}
 
 
-def next_move(depth: int, board: chess.Board, debug=True) -> chess.Move:
+def next_move(
+    depth: int,
+    board: chess.Board,
+    transposition_table: TranspositionTable = None,
+    debug=True,
+) -> chess.Move:
     """
     What is the next best move?
     """
     debug_info.clear()
     debug_info["nodes"] = 0
     t0 = time.time()
-
-    move = minimax_root(depth, board)
+    if not transposition_table:
+        transposition_table = TranspositionTable()
+    move = minimax_root(depth, board, transposition_table)
 
     debug_info["time"] = time.time() - t0
     if debug == True:
@@ -23,7 +31,9 @@ def next_move(depth: int, board: chess.Board, debug=True) -> chess.Move:
     return move
 
 
-def get_ordered_moves(board: chess.Board) -> List[chess.Move]:
+def get_ordered_moves(
+    board: chess.Board, only_capture: bool = False
+) -> List[chess.Move]:
     """
     Get legal moves.
     Attempt to sort moves by best to worst.
@@ -37,10 +47,14 @@ def get_ordered_moves(board: chess.Board) -> List[chess.Move]:
     in_order = sorted(
         board.legal_moves, key=orderer, reverse=(board.turn == chess.WHITE)
     )
+    if only_capture:
+        return [move for move in in_order if board.is_capture(move)]
     return list(in_order)
 
 
-def minimax_root(depth: int, board: chess.Board) -> chess.Move:
+def minimax_root(
+    depth: int, board: chess.Board, transposition_table: TranspositionTable
+) -> chess.Move:
     # White always wants to maximize (and black to minimize)
     # the board score according to evaluate_board()
     maximize = board.turn == chess.WHITE
@@ -59,7 +73,14 @@ def minimax_root(depth: int, board: chess.Board) -> chess.Move:
         if board.can_claim_draw():
             value = 0.0
         else:
-            value = minimax(depth - 1, board, -float("inf"), float("inf"), not maximize)
+            value = minimax(
+                depth - 1,
+                board,
+                -float("inf"),
+                float("inf"),
+                not maximize,
+                transposition_table,
+            )
         board.pop()
         if maximize and value >= best_move:
             best_move = value
@@ -71,12 +92,33 @@ def minimax_root(depth: int, board: chess.Board) -> chess.Move:
     return best_move_found
 
 
+# https://www.chessprogramming.org/Quiescence_Search
+def quiesce(board: chess.Board, alpha: float, beta: float, depth: int = 1):
+    stand_pat = evaluate_board(board)
+    if stand_pat >= beta:
+        return beta
+    if alpha < stand_pat:
+        alpha = stand_pat
+    if depth > 0:
+        moves = get_ordered_moves(board, True)
+        for move in moves:
+            board.push(move)
+            score = quiesce(board, alpha, beta, depth - 1)
+            board.pop()
+            if score >= beta:
+                return beta
+            if score > alpha:
+                alpha = score
+    return alpha
+
+
 def minimax(
     depth: int,
     board: chess.Board,
     alpha: float,
     beta: float,
     is_maximising_player: bool,
+    transposition_table: TranspositionTable,
 ) -> float:
     debug_info["nodes"] += 1
 
@@ -89,33 +131,59 @@ def minimax(
         return 0
 
     if depth == 0:
-        return evaluate_board(board)
+        return quiesce(board, alpha, beta)
+
+    # Transposition Table
+    # https://www.chessprogramming.org/Transposition_Table
+    zobrist = chess.polyglot.zobrist_hash(board)
+    stored_position = transposition_table.get(zobrist, depth)
+    if stored_position is not None and stored_position.depth >= depth:
+        # print('-- stored ==')
+        return stored_position.value
+    best_move = None
 
     if is_maximising_player:
-        best_move = -float("inf")
+        move_value = -float("inf")
         moves = get_ordered_moves(board)
         for move in moves:
             board.push(move)
-            best_move = max(
-                best_move,
-                minimax(depth - 1, board, alpha, beta, not is_maximising_player),
+            best_move = move
+            move_value = max(
+                move_value,
+                minimax(
+                    depth - 1,
+                    board,
+                    alpha,
+                    beta,
+                    not is_maximising_player,
+                    transposition_table,
+                ),
             )
             board.pop()
-            alpha = max(alpha, best_move)
+            alpha = max(alpha, move_value)
             if beta <= alpha:
-                return best_move
-        return best_move
+                break
     else:
-        best_move = float("inf")
+        move_value = float("inf")
         moves = get_ordered_moves(board)
         for move in moves:
             board.push(move)
-            best_move = min(
-                best_move,
-                minimax(depth - 1, board, alpha, beta, not is_maximising_player),
+            best_move = move
+            move_value = min(
+                move_value,
+                minimax(
+                    depth - 1,
+                    board,
+                    alpha,
+                    beta,
+                    not is_maximising_player,
+                    transposition_table,
+                ),
             )
             board.pop()
-            beta = min(beta, best_move)
+            beta = min(beta, move_value)
             if beta <= alpha:
-                return best_move
-        return best_move
+                break
+    new_entry = HashEntry(zobrist, best_move, depth, move_value, board.fullmove_number)
+    transposition_table.replace(new_entry)
+    return move_value

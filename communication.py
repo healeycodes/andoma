@@ -2,6 +2,7 @@ import sys
 import chess
 import argparse
 from movegeneration import next_move
+from transposition_table import TranspositionTable
 
 
 def talk():
@@ -11,14 +12,20 @@ def talk():
     """
     board = chess.Board()
     depth = get_depth()
+    transposition_table = TranspositionTable()
 
     while True:
         msg = input()
         print(f">>> {msg}", file=sys.stderr)
-        command(depth, board, msg)
+        command(depth, board, msg, transposition_table)
 
 
-def command(depth: int, board: chess.Board, msg: str):
+def command(
+    depth: int,
+    board: chess.Board,
+    msg: str,
+    transposition_table: TranspositionTable = None,
+):
     """
     Accept UCI commands and respond.
     The board state is also updated.
@@ -53,7 +60,7 @@ def command(depth: int, board: chess.Board, msg: str):
         return
 
     if msg[0:2] == "go":
-        _move = next_move(depth, board)
+        _move = next_move(depth, board, transposition_table)
         print(f"bestmove {_move}")
         return
 
