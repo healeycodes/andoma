@@ -121,3 +121,11 @@ class TestEvaluation(unittest.TestCase):
         self.assertTrue(
             evaluate_board(starting_fen) > evaluate_board(white_down_one_pawn)
         )
+
+        white_played_e2e4 = chess.Board(
+            "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+        )
+
+        self.assertTrue(
+            evaluate_board(starting_fen) < evaluate_board(white_played_e2e4)
+        )
