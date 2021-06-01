@@ -118,7 +118,7 @@ class TestEvaluation(unittest.TestCase):
         )
 
         self.assertTrue(
-            evaluate_board(chess.STARTING_FEN) > evaluate_board(white_down_one_pawn)
+            evaluate_board(chess.Board()) > evaluate_board(white_down_one_pawn)
         )
 
         white_played_e2e4 = chess.Board(
@@ -126,7 +126,7 @@ class TestEvaluation(unittest.TestCase):
         )
 
         self.assertTrue(
-            evaluate_board(chess.STARTING_FEN) < evaluate_board(white_played_e2e4)
+            evaluate_board(chess.Board()) < evaluate_board(white_played_e2e4)
         )
 
         black_played_b8c6 = chess.Board(
