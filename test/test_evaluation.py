@@ -14,6 +14,9 @@ class TestEvaluation(unittest.TestCase):
         move = chess.Move.from_uci("e4d5")
         # pawn takes pawn
         pawn_for_pawn = move_value(board, move, check_end_game(board))
+        self.assertEqual(
+            pawn_for_pawn, 5, f"Pawn for pawn {pawn_for_pawn} but it should be 5"
+        )
 
         board = chess.Board(
             "rnbqkbnr/ppp1pppp/8/3p4/2Q1P3/3P1P2/PPP1B1PP/RNB1K1NR w KQkq - 0 1"
@@ -35,7 +38,7 @@ class TestEvaluation(unittest.TestCase):
         # pawn takes queen
         pawn_for_queen = move_value(board, move, check_end_game(board))
         self.assertEqual(
-            pawn_for_queen, 775, f"Pawn for Queen {pawn_for_queen} but it should be 775"
+            pawn_for_queen, 790, f"Pawn for Queen {pawn_for_queen} but it should be 790"
         )
 
         board = chess.Board("8/4P3/2k5/8/8/3K4/8/8 w - - 0 1")
@@ -67,7 +70,7 @@ class TestEvaluation(unittest.TestCase):
         # pawn takes pawn
         pawn_for_pawn = move_value(board, move, check_end_game(board))
         self.assertEqual(
-            pawn_for_pawn, 5, f"Pawn for pawn {pawn_for_pawn} but it should be 5"
+            pawn_for_pawn, -5, f"Pawn for pawn {pawn_for_pawn} but it should be -5"
         )
 
         board = chess.Board(
@@ -89,8 +92,8 @@ class TestEvaluation(unittest.TestCase):
 
         self.assertEqual(
             pawn_for_queen,
-            -775,
-            f"Pawn for queen {pawn_for_queen} but it should be -775",
+            -790,
+            f"Pawn for queen {pawn_for_queen} but it should be -790",
         )
 
         best_to_worst = list(sorted([pawn_for_queen, pawn_for_pawn, queen_for_pawn]))
@@ -120,4 +123,20 @@ class TestEvaluation(unittest.TestCase):
 
         self.assertTrue(
             evaluate_board(starting_fen) > evaluate_board(white_down_one_pawn)
+        )
+
+        white_played_e2e4 = chess.Board(
+            "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+        )
+
+        self.assertTrue(
+            evaluate_board(starting_fen) < evaluate_board(white_played_e2e4)
+        )
+
+        black_played_b8c6 = chess.Board(
+            'r1bqkbnr/pppppppp/2n5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2'
+        )
+
+        self.assertTrue(
+            evaluate_board(black_played_b8c6) < evaluate_board(white_played_e2e4)
         )
