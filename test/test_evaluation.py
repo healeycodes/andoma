@@ -113,16 +113,12 @@ class TestEvaluation(unittest.TestCase):
         self.assertEqual(check_end_game(board), True)
 
     def test_evaluate_board(self):
-        starting_fen = chess.Board(
-            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-        )
-
         white_down_one_pawn = chess.Board(
             "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPP1/RNBQKBNR w KQkq - 0 1"
         )
 
         self.assertTrue(
-            evaluate_board(starting_fen) > evaluate_board(white_down_one_pawn)
+            evaluate_board(chess.STARTING_FEN) > evaluate_board(white_down_one_pawn)
         )
 
         white_played_e2e4 = chess.Board(
@@ -130,11 +126,11 @@ class TestEvaluation(unittest.TestCase):
         )
 
         self.assertTrue(
-            evaluate_board(starting_fen) < evaluate_board(white_played_e2e4)
+            evaluate_board(chess.STARTING_FEN) < evaluate_board(white_played_e2e4)
         )
 
         black_played_b8c6 = chess.Board(
-            'r1bqkbnr/pppppppp/2n5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2'
+            "r1bqkbnr/pppppppp/2n5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2"
         )
 
         self.assertTrue(

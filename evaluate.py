@@ -2,6 +2,7 @@ import chess
 
 # this module implement's Tomasz Michniewski's Simplified Evaluation Function
 # https://www.chessprogramming.org/Simplified_Evaluation_Function
+# note that the board layouts have been flipped and the top left square is A1
 
 # fmt: off
 piece_value = {
