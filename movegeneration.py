@@ -41,6 +41,9 @@ def get_ordered_moves(board: chess.Board) -> List[chess.Move]:
 
 
 def minimax_root(depth: int, board: chess.Board) -> chess.Move:
+    """
+    What is the highest value move per our evaluation function?
+    """
     # White always wants to maximize (and black to minimize)
     # the board score according to evaluate_board()
     maximize = board.turn == chess.WHITE
@@ -78,6 +81,10 @@ def minimax(
     beta: float,
     is_maximising_player: bool,
 ) -> float:
+    """
+    Core minimax logic.
+    https://en.wikipedia.org/wiki/Minimax
+    """
     debug_info["nodes"] += 1
 
     if board.is_checkmate():
