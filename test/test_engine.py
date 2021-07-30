@@ -7,13 +7,20 @@ from communication import command
 
 class TestCommunication(unittest.TestCase):
     def test_uci_command(self):
+        """
+        Test uci command respond (id name, id author, uciok)
+        """
         board = chess.Board()
         with patch("sys.stdout", new=StringIO()) as patched_output:
             command(3, board, "uci")
             lines = patched_output.getvalue().strip().split("\n")
             self.assertEqual(len(lines), 3)
+            self.assertEqual(lines[2], "uciok")
 
     def test_startpos_command(self):
+        """
+        Test position command setup a board one that has received one half-move
+        """
         board = chess.Board()
         command(3, board, "position startpos moves e2e4")
         self.assertEqual(
@@ -111,5 +118,5 @@ class TestCommunication(unittest.TestCase):
             )
             command(3, board, "go")
 
-            # Bot is in a favorable position, should avoid threefold repetition
+            # bot is in a favorable position, should avoid threefold repetition
             self.assertNotEqual(patched_output.getvalue().strip(), "bestmove c6a8")
