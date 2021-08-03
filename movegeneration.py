@@ -7,6 +7,10 @@ from evaluate import evaluate_board, move_value, check_end_game
 debug_info: Dict[str, Any] = {}
 
 
+MATE_SCORE     = 1000000000
+MATE_THRESHOLD =  999000000
+
+
 def next_move(depth: int, board: chess.Board, debug=True) -> chess.Move:
     """
     What is the next best move?
@@ -89,7 +93,7 @@ def minimax(
 
     if board.is_checkmate():
         # The previous move resulted in checkmate
-        return -float("inf") if is_maximising_player else float("inf")
+        return -MATE_SCORE if is_maximising_player else MATE_SCORE
     # When the game is over and it's not a checkmate it's a draw
     # In this case, don't evaluate. Just return a neutral result: zero
     elif board.is_game_over():
@@ -103,9 +107,16 @@ def minimax(
         moves = get_ordered_moves(board)
         for move in moves:
             board.push(move)
+            curr_move = minimax(depth - 1, board, alpha, beta, not is_maximising_player)
+            # Each ply after a checkmate is slower, so they get ranked slightly less
+            # We want the fastest mate!
+            if curr_move > MATE_THRESHOLD:
+                curr_move -= 1
+            elif curr_move < -MATE_THRESHOLD:
+                curr_move += 1
             best_move = max(
                 best_move,
-                minimax(depth - 1, board, alpha, beta, not is_maximising_player),
+                curr_move,
             )
             board.pop()
             alpha = max(alpha, best_move)
@@ -117,9 +128,14 @@ def minimax(
         moves = get_ordered_moves(board)
         for move in moves:
             board.push(move)
+            curr_move = minimax(depth - 1, board, alpha, beta, not is_maximising_player)
+            if curr_move > MATE_THRESHOLD:
+                curr_move -= 1
+            elif curr_move < -MATE_THRESHOLD:
+                curr_move += 1
             best_move = min(
                 best_move,
-                minimax(depth - 1, board, alpha, beta, not is_maximising_player),
+                curr_move,
             )
             board.pop()
             beta = min(beta, best_move)
