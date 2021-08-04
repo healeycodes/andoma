@@ -1,4 +1,4 @@
-![Unit tests and puzzles](https://github.com/healeycodes/andoma/workflows/Unit%20tests%20and%20puzzles/badge.svg)
+[![Unit tests and puzzles](https://github.com/healeycodes/andoma/workflows/Unit%20tests%20and%20puzzles/badge.svg)](https://github.com/healeycodes/andoma/actions/workflows/python-app.yml)
 
 # ♟ Andoma
 > My blog post: [Building My Own Chess Engine](https://healeycodes.com/building-my-own-chess-engine/)
@@ -12,7 +12,9 @@ A chess engine which implements:
 - A slice of the Universal Chess Interface (UCI) to allow challenges via lichess.org
 - A command-line user interface
 
-It uses Python 3.8 with type hints as well as unit + integration tests. Mypy checks type hints as part of the GitHub Actions CI pipeline.
+It uses Python 3.8 with Mypy type hints and unit + integration tests.
+
+See [Contributing](#contributing) to help out!
 
 <br>
 
@@ -96,3 +98,15 @@ Type hints:
 `pip install -r requirements-dev.txt`
 
 `mypy .`
+
+<br>
+
+## Contributing
+
+Raise an issue to propose a bug fix or feature (or pick up an existing one).
+
+I ([@healeycodes](https://github.com/healeycodes)) am happy to help you along the way.
+
+For coding style: look at the existing files, use Mypy types, use PEP8, and add a test for any change in functionality.
+
+Please run the tests locally before submitting a PR.
