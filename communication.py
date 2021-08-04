@@ -13,7 +13,7 @@ def talk():
     depth = get_depth()
 
     while True:
-        msg = input().strip()
+        msg = input()
         command(depth, board, msg)
 
 
@@ -22,6 +22,7 @@ def command(depth: int, board: chess.Board, msg: str):
     Accept UCI commands and respond.
     The board state is also updated.
     """
+    msg = msg.strip()
     tokens = msg.split(" ")
     while "" in tokens:
         tokens.remove("")
