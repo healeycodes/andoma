@@ -14,7 +14,6 @@ def talk():
 
     while True:
         msg = input()
-        print(f">>> {msg}", file=sys.stderr)
         command(depth, board, msg)
 
 
@@ -23,6 +22,11 @@ def command(depth: int, board: chess.Board, msg: str):
     Accept UCI commands and respond.
     The board state is also updated.
     """
+    msg = msg.strip()
+    tokens = msg.split(" ")
+    while "" in tokens:
+        tokens.remove("")
+
     if msg == "quit":
         sys.exit()
 
@@ -39,18 +43,32 @@ def command(depth: int, board: chess.Board, msg: str):
     if msg == "ucinewgame":
         return
 
-    if "position startpos moves" in msg:
-        moves = msg.split(" ")[3:]
-        board.clear()
-        board.set_fen(chess.STARTING_FEN)
-        for move in moves:
-            board.push(chess.Move.from_uci(move))
-        return
+    if msg.startswith("position"):
+        if len(tokens) < 2:
+            return
 
-    if "position fen" in msg:
-        fen = " ".join(msg.split(" ")[2:])
-        board.set_fen(fen)
-        return
+        # Set starting position
+        if tokens[1] == "startpos":
+            board.reset()
+            moves_start = 2
+        elif tokens[1] == "fen":
+            fen = " ".join(tokens[2:8])
+            board.set_fen(fen)
+            moves_start = 8
+        else:
+            return
+
+        # Apply moves
+        if len(tokens) <= moves_start or tokens[moves_start] != "moves":
+            return
+
+        for move in tokens[(moves_start+1):]:
+            board.push_uci(move)
+
+    if msg == "d":
+        # Non-standard command, but supported by Stockfish and helps debugging
+        print(board)
+        print(board.fen())
 
     if msg[0:2] == "go":
         _move = next_move(depth, board)

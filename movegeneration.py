@@ -19,7 +19,7 @@ def next_move(depth: int, board: chess.Board, debug=True) -> chess.Move:
 
     debug_info["time"] = time.time() - t0
     if debug == True:
-        print(f">>> {debug_info}", file=sys.stderr)
+        print(f"info {debug_info}")
     return move
 
 

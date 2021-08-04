@@ -17,14 +17,52 @@ class TestCommunication(unittest.TestCase):
             self.assertEqual(len(lines), 3)
             self.assertEqual(lines[2], "uciok")
 
-    def test_startpos_command(self):
+    def test_position_startpos_command(self):
         """
-        Test position command setup a board one that has received one half-move
+        Test position command setup a board using identifier 'startpos'
         """
         board = chess.Board()
+
+        # Startpos and moves
         command(3, board, "position startpos moves e2e4")
         self.assertEqual(
             board.fen(), "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+        )
+
+        # Just startpos
+        command(3, board, "position startpos")
+        self.assertEqual(
+            board.fen(), "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        )
+
+        # Arbitrary whitespace
+        command(3, board, "   position  startpos   moves  e2e4 d7d5  e4d5   ")
+        self.assertEqual(
+            board.fen(), "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2"
+        )
+
+        # Token 'moves' but no moves
+        command(3, board, "position startpos moves")
+        self.assertEqual(
+            board.fen(), "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        )
+
+    def test_position_fen_command(self):
+        """
+        Test position command setup a board using fen string
+        """
+        board = chess.Board()
+
+        # Just fen
+        command(3, board, "position fen rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2")
+        self.assertEqual(
+            board.fen(), "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+        )
+
+        # Fen and moves
+        command(3, board, "position fen rnbqkbnr/pp2pppp/3p4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3 moves c5d4 f3d4 g7g6")
+        self.assertEqual(
+            board.fen(), "rnbqkbnr/pp2pp1p/3p2p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5"
         )
 
     def test_go_command_black(self):
@@ -41,7 +79,7 @@ class TestCommunication(unittest.TestCase):
             command(3, board, "go")
 
             # black bishop should take a undefended rook
-            self.assertEqual(patched_output.getvalue().strip(), "bestmove d4b6")
+            self.assertEqual(patched_output.getvalue().splitlines()[1], "bestmove d4b6")
 
         board = chess.Board()
         with patch("sys.stdout", new=StringIO()) as patched_output:
@@ -53,7 +91,7 @@ class TestCommunication(unittest.TestCase):
             command(3, board, "go")
 
             # black will trade a bishop for a queen
-            self.assertEqual(patched_output.getvalue().strip(), "bestmove g7c3")
+            self.assertEqual(patched_output.getvalue().splitlines()[1], "bestmove g7c3")
 
         board = chess.Board()
         with patch("sys.stdout", new=StringIO()) as patched_output:
@@ -65,7 +103,7 @@ class TestCommunication(unittest.TestCase):
             command(3, board, "go")
 
             # black will threaten a bishop with a pawn (a very strong but not instantly obvious move)
-            self.assertEqual(patched_output.getvalue().strip(), "bestmove c5c4")
+            self.assertEqual(patched_output.getvalue().splitlines()[1], "bestmove c5c4")
 
     def test_go_command_white(self):
         """
@@ -79,7 +117,7 @@ class TestCommunication(unittest.TestCase):
             command(3, board, "go")
 
             # white bishop should take a undefended rook
-            self.assertEqual(patched_output.getvalue().strip(), "bestmove b3g8")
+            self.assertEqual(patched_output.getvalue().splitlines()[1], "bestmove b3g8")
 
         board = chess.Board()
         with patch("sys.stdout", new=StringIO()) as patched_output:
@@ -91,7 +129,7 @@ class TestCommunication(unittest.TestCase):
             command(3, board, "go")
 
             # white will trade a bishop for a queen
-            self.assertEqual(patched_output.getvalue().strip(), "bestmove b2g7")
+            self.assertEqual(patched_output.getvalue().splitlines()[1], "bestmove b2g7")
 
         board = chess.Board()
         with patch("sys.stdout", new=StringIO()) as patched_output:
@@ -103,7 +141,7 @@ class TestCommunication(unittest.TestCase):
             command(3, board, "go")
 
             # white will threaten a bishop with a pawn (a very strong but not instantly obvious move)
-            self.assertEqual(patched_output.getvalue().strip(), "bestmove f4f5")
+            self.assertEqual(patched_output.getvalue().splitlines()[1], "bestmove f4f5")
 
     def test_draw(self):
         """
@@ -119,4 +157,4 @@ class TestCommunication(unittest.TestCase):
             command(3, board, "go")
 
             # bot is in a favorable position, should avoid threefold repetition
-            self.assertNotEqual(patched_output.getvalue().strip(), "bestmove c6a8")
+            self.assertNotEqual(patched_output.getvalue().splitlines()[1], "bestmove c6a8")
