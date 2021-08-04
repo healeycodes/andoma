@@ -12,3 +12,9 @@ class TestPuzzles(unittest.TestCase):
         )
         move = next_move(3, board)
         self.assertEqual(move.uci(), "f5g6")
+
+    def test_mate_in_one(self):
+        # Multiple mate in 2s/3s, but only one mate in 1
+        board = chess.Board("6k1/8/8/5r2/8/8/4r3/2K5 b - - 1 1")
+        move = next_move(3, board)
+        self.assertEqual(move.uci(), "f5f1")
