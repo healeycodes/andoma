@@ -9,12 +9,13 @@ def talk():
     The main input/output loop.
     This implements a slice of the UCI protocol.
     """
+    global search_depth
     board = chess.Board()
-    depth = get_depth()
+    search_depth = get_depth()
 
     while True:
         msg = input()
-        command(depth, board, msg)
+        command(search_depth, board, msg)
 
 
 def command(depth: int, board: chess.Board, msg: str):
@@ -26,6 +27,8 @@ def command(depth: int, board: chess.Board, msg: str):
     tokens = msg.split(" ")
     while "" in tokens:
         tokens.remove("")
+    if len(tokens) <= 0:
+        return
 
     if msg == "quit":
         sys.exit()
@@ -33,6 +36,7 @@ def command(depth: int, board: chess.Board, msg: str):
     if msg == "uci":
         print("id name Andoma")  # Andrew/Roma -> And/oma
         print("id author Andrew Healey & Roma Parramore")
+        print("option name SearchDepth type spin default 3 min 1 max 20")
         print("uciok")
         return
 
@@ -43,7 +47,7 @@ def command(depth: int, board: chess.Board, msg: str):
     if msg == "ucinewgame":
         return
 
-    if msg.startswith("position"):
+    if tokens[0] == "position":
         if len(tokens) < 2:
             return
 
@@ -69,11 +73,28 @@ def command(depth: int, board: chess.Board, msg: str):
         # Non-standard command, but supported by Stockfish and helps debugging
         print(board)
         print(board.fen())
+        print(f"Depth: {depth}")
 
-    if msg[0:2] == "go":
+    if tokens[0] == "go":
         _move = next_move(depth, board)
         print(f"bestmove {_move}")
         return
+
+    if tokens[0] == "setoption":
+        if len(tokens) < 3 or tokens[1] != "name":
+            return
+
+        if tokens[2] == "SearchDepth":
+            if len(tokens) < 5 or tokens[3] != "value":
+                return
+            new_depth = int(tokens[4])
+            if new_depth < 1 or new_depth > 20:
+                return
+            global search_depth
+            search_depth = new_depth
+        else:
+            # "SearchDepth" is the only option we support currently
+            return
 
 
 def get_depth() -> int:
