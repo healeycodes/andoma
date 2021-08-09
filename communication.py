@@ -4,6 +4,9 @@ import argparse
 from movegeneration import next_move
 
 
+search_depth: int
+
+
 def talk():
     """
     The main input/output loop.
