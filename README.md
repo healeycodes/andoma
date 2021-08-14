@@ -51,6 +51,10 @@ Enter a move like g1h3:
 
 ## Use it as a UCI engine
 
+_The only interfaces that Andoma currently supports are [ShailChoksi/lichess-bot](https://github.com/ShailChoksi/lichess-bot) and the command-line UI (ui.py). Debug information and configuration options are minimal compared to a full UCI engine._
+
+<br>
+
 Start the engine with:
 
 `python main.py`
@@ -74,8 +78,6 @@ Also accepts a FEN string:
 <br>
 
 See the [UCI interface doc](https://github.com/healeycodes/andoma/blob/main/uci-interface.md) for more information on communicating with the engine.
-
-Debug information (the number of positions searched, the time taken) is sent to stderr. The engine's response is sent to stdout.
 
 <br>
 
