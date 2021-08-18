@@ -13,9 +13,9 @@ class TestCommunication(unittest.TestCase):
         board = chess.Board()
         with patch("sys.stdout", new=StringIO()) as patched_output:
             command(3, board, "uci")
-            lines = patched_output.getvalue().strip().split("\n")
-            self.assertEqual(len(lines), 3)
-            self.assertEqual(lines[2], "uciok")
+            lines = patched_output.getvalue().strip().splitlines()
+            self.assertEqual(len(lines), 4)
+            self.assertEqual(lines[-1], "uciok")
 
     def test_position_startpos_command(self):
         """
