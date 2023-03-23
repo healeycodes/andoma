@@ -32,30 +32,31 @@ def render(board: chess.Board) -> str:
     """
     board_string = list(str(board))
     uni_pieces = {
-        "R": "♖",
-        "N": "♘",
-        "B": "♗",
-        "Q": "♕",
-        "K": "♔",
-        "P": "♙",
-        "r": "♜",
-        "n": "♞",
-        "b": "♝",
-        "q": "♛",
-        "k": "♚",
-        "p": "♟",
-        ".": "·",
+        "R": "R ",
+        "N": "N ",
+        "B": "B ",
+        "Q": "Q ",
+        "K": "K ",
+        "P": "P ",
+        "r": "r ",
+        "n": "n ",
+        "b": "b ",
+        "q": "q ",
+        "k": "k ",
+        "p": "p ",
+        ".": "+ ",
     }
     for idx, char in enumerate(board_string):
         if char in uni_pieces:
             board_string[idx] = uni_pieces[char]
-    ranks = ["1", "2", "3", "4", "5", "6", "7", "8"]
+    ranks = ["1 |", "2 |", "3 |", "4 |", "5 |", "6 |", "7 |", "8 |"]
     display = []
     for rank in "".join(board_string).split("\n"):
         display.append(f"  {ranks.pop()} {rank}")
     if board.turn == chess.BLACK:
         display.reverse()
-    display.append("    a b c d e f g h")
+    display.append("      " + u"\u2500" * 22)
+    display.append("     a  b  c  d  e  f  g  h")
     return "\n" + "\n".join(display)
 
 
@@ -64,7 +65,8 @@ def get_move(board: chess.Board) -> chess.Move:
     Try (and keep trying) to get a legal next move from the user.
     Play the move by mutating the game board.
     """
-    move = input(f"\nYour move (e.g. {list(board.legal_moves)[0]}):\n")
+    print("My move:", next_move(get_depth(), board, debug=False))
+    move = input(f"Your move (e.g. {list(board.legal_moves)[0]}):\n")
 
     for legal_move in board.legal_moves:
         if move == str(legal_move):
