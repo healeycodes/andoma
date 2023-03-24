@@ -19,8 +19,10 @@ def start():
         board.push(get_move(board))
 
     while not board.is_game_over():
+        cpu_move=next_move(get_depth(), board, debug=False)
         board.push(next_move(get_depth(), board, debug=False))
         print(render(board))
+        print(f"\nMy move:",cpu_move)
         board.push(get_move(board))
 
     print(f"\nResult: [w] {board.result()} [b]")
